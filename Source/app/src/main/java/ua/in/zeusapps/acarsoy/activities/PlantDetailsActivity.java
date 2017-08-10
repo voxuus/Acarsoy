@@ -1,22 +1,24 @@
 package ua.in.zeusapps.acarsoy.activities;
 
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.in.zeusapps.acarsoy.R;
 import ua.in.zeusapps.acarsoy.models.Plant;
-import ua.in.zeusapps.acarsoy.models.PlantType;
+import ua.in.zeusapps.acarsoy.services.FakePlantService;
+import ua.in.zeusapps.acarsoy.services.IPlantService;
 
 public class PlantDetailsActivity extends AppCompatActivity {
+
+    private final IPlantService _plantService = new FakePlantService();
 
     @BindView(R.id.activity_plant_details_image_holder)
     FrameLayout _imageHolder;
@@ -34,19 +36,8 @@ public class PlantDetailsActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        Plant plant = randomPlant();
+        Plant plant = _plantService.getPlant();
         showData(plant);
-    }
-
-    private Plant randomPlant(){
-        Random random = new Random();
-
-        return new Plant(
-                "Random plant #" + random.nextInt(),
-                random.nextBoolean() ? PlantType.Coal : PlantType.Wind,
-                random.nextDouble() * 40,
-                random.nextDouble() * 25,
-                random.nextDouble() * 40);
     }
 
     private void showData(Plant plant) {

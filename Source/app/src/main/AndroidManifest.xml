@@ -20,6 +20,8 @@
         </activity>
         <activity android:name=".activities.PlantDetailsActivity">
         </activity>
+        <activity android:name=".activities.PlantListActivity">
+        </activity>
     </application>
 
 </manifest>

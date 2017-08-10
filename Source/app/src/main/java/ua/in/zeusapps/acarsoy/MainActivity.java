@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ua.in.zeusapps.acarsoy.activities.LoginActivity;
+import ua.in.zeusapps.acarsoy.activities.PlantDetailsActivity;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -19,6 +20,13 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.activity_main_login_screen)
     public void showLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
+
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.activity_main_plant_details)
+    public void showPlantDetails() {
+        Intent intent = new Intent(this, PlantDetailsActivity.class);
 
         startActivity(intent);
     }

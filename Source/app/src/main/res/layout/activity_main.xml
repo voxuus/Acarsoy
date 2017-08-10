@@ -24,12 +24,25 @@
 
     <Button
         android:id="@+id/activity_main_plant_details"
-        android:layout_width="368dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
 
         android:layout_marginTop="8dp"
         android:text="Show plant details"
         app:layout_constraintTop_toBottomOf="@+id/activity_main_login_screen"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <Button
+        android:id="@+id/activity_main_plant_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="8dp"
+        android:text="Show plants list"
+        app:layout_constraintTop_toBottomOf="@+id/activity_main_plant_details"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"

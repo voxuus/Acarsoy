@@ -8,5 +8,7 @@ import ua.in.zeusapps.acarsoy.models.PlantProductivity;
 public interface IPlantService {
     Plant getPlant();
 
+    List<Plant> getPlantList();
+
     List<PlantProductivity> getPlantProductivity(Plant plant);
 }

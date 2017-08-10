@@ -8,6 +8,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ua.in.zeusapps.acarsoy.activities.LoginActivity;
 import ua.in.zeusapps.acarsoy.activities.PlantDetailsActivity;
+import ua.in.zeusapps.acarsoy.activities.PlantListActivity;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -19,15 +20,21 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.activity_main_login_screen)
     public void showLogin(){
-        Intent intent = new Intent(this, LoginActivity.class);
-
-        startActivity(intent);
+        startActivity(LoginActivity.class);
     }
 
     @OnClick(R.id.activity_main_plant_details)
     public void showPlantDetails() {
-        Intent intent = new Intent(this, PlantDetailsActivity.class);
+        startActivity(PlantDetailsActivity.class);
+    }
 
+    @OnClick(R.id.activity_main_plant_list)
+    public void showPlantsList(){
+        startActivity(PlantListActivity.class);
+    }
+
+    private void startActivity(Class clazz){
+        Intent intent = new Intent(this, clazz);
         startActivity(intent);
     }
 }

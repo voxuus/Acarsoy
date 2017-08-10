@@ -18,11 +18,22 @@ public class FakePlantService implements IPlantService {
     @Override
     public Plant getPlant() {
         return new Plant(
-                "Random plant #" + _random.nextInt(),
-                _random.nextBoolean() ? PlantType.Coal : PlantType.Wind,
+                getName(),
+                getType(),
                 getPower(),
                 getWind(),
                 getTemperature());
+    }
+
+    @Override
+    public List<Plant> getPlantList() {
+        List<Plant> plants = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++){
+            plants.add(getPlant());
+        }
+
+        return plants;
     }
 
     @Override
@@ -34,6 +45,14 @@ public class FakePlantService implements IPlantService {
         }
 
         return prods;
+    }
+
+    private String getName(){
+        return "Random plant #" + Math.abs(_random.nextInt());
+    }
+
+    private PlantType getType(){
+        return _random.nextBoolean() ? PlantType.Coal : PlantType.Wind;
     }
 
     private double getPower(){

@@ -5,7 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorCoal">#690084</color>
     <color name="colorWind">#006f86</color>
+    <color name="colorTemperature">#1f884d</color>
 
-    <color name="colorDetails1">#18496a</color>
-    <color name="colorDetails2">#235372</color>
+    <color name="colorPower">#18496a</color>
+    <color name="colorWindSpeed">#235372</color>
+    <color name="colorPlantName">#083f61</color>
 </resources>

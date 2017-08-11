@@ -7,4 +7,5 @@
     <string name="mega_watts">%s Mwatt</string>
     <string name="meters_per_second">%s m/s</string>
     <string name="temperature">%s°C</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ua.in.zeusapps.acarsoy.activities.LoginActivity;
+import ua.in.zeusapps.acarsoy.activities.MapsActivity;
 import ua.in.zeusapps.acarsoy.activities.PlantDetailsActivity;
 import ua.in.zeusapps.acarsoy.activities.PlantListActivity;
 
@@ -31,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.activity_main_plant_list)
     public void showPlantsList(){
         startActivity(PlantListActivity.class);
+    }
+
+    @OnClick(R.id.activity_main_plant_maps)
+    public void showMaps(){
+        startActivity(MapsActivity.class);
     }
 
     private void startActivity(Class clazz){

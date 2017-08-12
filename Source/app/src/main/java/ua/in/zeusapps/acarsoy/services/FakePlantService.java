@@ -21,8 +21,6 @@ public class FakePlantService implements IPlantService {
     private final static double LATITUDE_CENTER = 41.422757;
     private final static double LONGITUDE_SKEW = 3;
     private final static double LATITUDE_SKEW = 2;
-    //41.422757, 27.706573
-
     @Override
     public Plant getPlant() {
         return new Plant(
@@ -57,7 +55,7 @@ public class FakePlantService implements IPlantService {
     }
 
     private String getName(){
-        return "Random plant #" + Math.abs(_random.nextInt());
+        return "T #" + Math.abs(_random.nextInt());
     }
 
     private PlantType getType(){

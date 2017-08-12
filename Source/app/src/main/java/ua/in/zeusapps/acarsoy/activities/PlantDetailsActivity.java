@@ -17,6 +17,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.in.zeusapps.acarsoy.R;
+import ua.in.zeusapps.acarsoy.common.GenericAdapter;
+import ua.in.zeusapps.acarsoy.common.GenericHolder;
 import ua.in.zeusapps.acarsoy.models.Plant;
 import ua.in.zeusapps.acarsoy.models.PlantProductivity;
 import ua.in.zeusapps.acarsoy.services.FakePlantService;
@@ -78,7 +80,7 @@ public class PlantDetailsActivity extends AppCompatActivity {
         _recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    class Holder extends RecyclerView.ViewHolder {
+    class Holder extends GenericHolder<PlantProductivity> {
         @BindView(R.id.template_plant_productivity_details_power)
         TextView powerTextView;
         @BindView(R.id.template_plant_productivity_details_wind)
@@ -86,14 +88,9 @@ public class PlantDetailsActivity extends AppCompatActivity {
 
         public Holder(View itemView) {
             super(itemView);
-
-            ButterKnife.bind(this, itemView);
         }
 
-        void update(PlantProductivity productivity) {
-
-
-
+        public void update(PlantProductivity productivity) {
             powerTextView.setText(
                     String.format(
                             getString(R.string.power_format),
@@ -105,12 +102,9 @@ public class PlantDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private class Adapter extends RecyclerView.Adapter<Holder> {
-
-        private final List<PlantProductivity> _items;
-
-        public Adapter(List<PlantProductivity> items) {
-            _items = items;
+    private class Adapter extends GenericAdapter<PlantProductivity, Holder> {
+        protected Adapter(List<PlantProductivity> plantProductivities) {
+            super(plantProductivities);
         }
 
         @Override
@@ -118,16 +112,6 @@ public class PlantDetailsActivity extends AppCompatActivity {
             View view = getLayoutInflater()
                     .inflate(R.layout.template_plant_productivity_details, parent, false);
             return new Holder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(Holder holder, int position) {
-            holder.update(_items.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return _items.size();
         }
     }
 }

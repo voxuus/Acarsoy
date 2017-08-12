@@ -54,6 +54,18 @@ public class FakePlantService implements IPlantService {
         return prods;
     }
 
+    @Override
+    public List<PlantProductivity> getPlantsProductivityByHours() {
+        List<PlantProductivity> prods = new ArrayList<>();
+
+        for (int hour = 0; hour < 24; hour++){
+            prods.add(new PlantProductivity(getPower(), getWind(), hour, PlantType.Coal));
+            prods.add(new PlantProductivity(getPower(), getWind(), hour, PlantType.Wind));
+        }
+
+        return prods;
+    }
+
     private String getName(){
         return "T #" + Math.abs(_random.nextInt());
     }

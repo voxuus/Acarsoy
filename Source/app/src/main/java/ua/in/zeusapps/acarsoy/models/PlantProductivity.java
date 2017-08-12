@@ -4,13 +4,31 @@ public class PlantProductivity {
     private double _power;
     private double _wind;
 
+    private int _hour;
+    private PlantType _plantType;
+
     public PlantProductivity(double power, double wind) {
         _power = power;
         _wind = wind;
     }
 
+    public PlantProductivity(double power, double wind, int hour, PlantType plantType) {
+        _power = power;
+        _wind = wind;
+        _hour = hour;
+        _plantType = plantType;
+    }
+
     public PlantProductivity() {
 
+    }
+
+    public int getHour() {
+        return _hour;
+    }
+
+    public PlantType getPlantType() {
+        return _plantType;
     }
 
     public double getPower() {

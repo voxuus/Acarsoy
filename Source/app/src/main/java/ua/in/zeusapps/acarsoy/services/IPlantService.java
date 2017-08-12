@@ -11,4 +11,6 @@ public interface IPlantService {
     List<Plant> getPlantList();
 
     List<PlantProductivity> getPlantProductivity(Plant plant);
+
+    List<PlantProductivity> getPlantsProductivityByHours();
 }

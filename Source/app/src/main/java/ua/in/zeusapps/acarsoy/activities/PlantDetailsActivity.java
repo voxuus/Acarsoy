@@ -96,11 +96,11 @@ public class PlantDetailsActivity extends AppCompatActivity {
 
             powerTextView.setText(
                     String.format(
-                            getString(R.string.mega_watts),
+                            getString(R.string.power_format),
                             _df.format(productivity.getPower())));
             windTextView.setText(
                     String.format(
-                            getString(R.string.meters_per_second),
+                            getString(R.string.wind_format),
                             _df.format(productivity.getWind())));
         }
     }

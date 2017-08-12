@@ -1,7 +1,6 @@
 package ua.in.zeusapps.acarsoy.activities;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,13 +16,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.in.zeusapps.acarsoy.R;
+import ua.in.zeusapps.acarsoy.common.GenericAdapter;
+import ua.in.zeusapps.acarsoy.common.PlantHolder;
 import ua.in.zeusapps.acarsoy.models.Plant;
 import ua.in.zeusapps.acarsoy.services.FakePlantService;
 import ua.in.zeusapps.acarsoy.services.IPlantService;
 
 public class PlantListActivity extends AppCompatActivity {
-
-    private final DecimalFormat _df = new DecimalFormat("0.0");
     private final IPlantService _plantService = new FakePlantService();
 
     @BindView(R.id.activity_plant_list_recyclerView)
@@ -43,7 +42,8 @@ public class PlantListActivity extends AppCompatActivity {
         _recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    class Holder extends RecyclerView.ViewHolder {
+    public class Holder extends PlantHolder {
+        private DecimalFormat _df = new DecimalFormat("0.0");
         @BindView(R.id.template_plant_item_icon_holder)
         FrameLayout _iconHolder;
         @BindView(R.id.template_plant_item_icon)
@@ -59,49 +59,24 @@ public class PlantListActivity extends AppCompatActivity {
 
         public Holder(View itemView) {
             super(itemView);
-
-            ButterKnife.bind(this, itemView);
         }
 
-        void update(Plant plant){
-            int iconRes = 0;
-            int colorRes = 0;
-            switch (plant.getType()){
-                case Coal:
-                    iconRes = R.drawable.coal;
-                    colorRes = R.color.colorCoal;
-                    break;
-                case Wind:
-                    iconRes = R.drawable.wind;
-                    colorRes = R.color.colorWind;
-                    break;
-            }
-
-            _icon.setBackground(ContextCompat.getDrawable(PlantListActivity.this, iconRes));
-            _iconHolder.setBackgroundColor(ContextCompat.getColor(PlantListActivity.this, colorRes));
+        @Override
+        public void update(Plant plant){
+            _icon.setBackground(getIcon(plant));
+            _iconHolder.setBackgroundColor(getIconBackground(plant));
             _nameTextView.setText(plant.getName());
-            _powerTextView.setText(String.format(
-                    getString(R.string.mega_watts),
-                    _df.format(plant.getPower())
-            ));
-
-            _windTextView.setText(String.format(
-                    getString(R.string.meters_per_second),
-                    _df.format(plant.getWind())
-            ));
-            _temperatureTextView.setText(String.format(
-                    getString(R.string.temperature),
-                    _df.format(plant.getTemperature())
-            ));
+            _powerTextView.setText(getPower(plant));
+            _windTextView.setText(getWind(plant));
+            _temperatureTextView.setText(getTemperature(plant));
         }
     }
 
-    private class Adapter extends RecyclerView.Adapter<Holder> {
+    private class Adapter extends GenericAdapter<Plant, Holder> {
 
-        private final List<Plant> _items;
 
-        private Adapter(List<Plant> items) {
-            _items = items;
+        protected Adapter(List<Plant> plants) {
+            super(plants);
         }
 
         @Override
@@ -110,16 +85,6 @@ public class PlantListActivity extends AppCompatActivity {
                     .inflate(R.layout.template_plant_item, parent, false);
 
             return new Holder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(Holder holder, int position) {
-            holder.update(_items.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return _items.size();
         }
     }
 }

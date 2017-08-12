@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="8dp"
+    app:cardElevation="8dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/plant_icon_size">
+
+        <FrameLayout
+            android:id="@+id/template_plant_item_icon_holder"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/colorCoal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:id="@+id/template_plant_item_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            app:layout_constraintLeft_toRightOf="@+id/template_plant_item_icon_holder"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/colorPlantName"
+            android:id="@+id/template_plant_item_name_holder">
+            <TextView
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:id="@+id/template_plant_item_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:textColor="@android:color/white"
+                tools:text="Test plant name"/>
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toRightOf="@+id/template_plant_item_icon_holder"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/template_plant_item_name_holder"
+            app:layout_constraintVertical_bias="0.0">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:background="@color/colorPower">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:id="@+id/template_plant_item_power"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:background="@color/colorWindSpeed">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:id="@+id/template_plant_item_wind"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:background="@color/colorTemperature">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:id="@+id/template_plant_item_temperature"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Acarsoy</string>
+    <string name="activity_login_label">Uygulama girisi</string>
+    <string name="activity_login_button">Giris yap</string>
+    <string name="activity_login_password">Password</string>
+    <string name="activity_login_username">Username</string>
+    <string name="power_format">%s Mwatt</string>
+    <string name="wind_format">%s m/s</string>
+    <string name="temperature">%s°C</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

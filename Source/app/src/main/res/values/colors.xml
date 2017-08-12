@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorCoal">#690084</color>
+    <color name="colorWind">#006f86</color>
+    <color name="colorTemperature">#1f884d</color>
+
+    <color name="colorPower">#18496a</color>
+    <color name="colorWindSpeed">#235372</color>
+    <color name="colorPlantName">#083f61</color>
 </resources>

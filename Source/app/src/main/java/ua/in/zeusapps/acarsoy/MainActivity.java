@@ -11,8 +11,10 @@ import ua.in.zeusapps.acarsoy.activities.LoginActivity;
 import ua.in.zeusapps.acarsoy.activities.MapsActivity;
 import ua.in.zeusapps.acarsoy.activities.PlantDetailsActivity;
 import ua.in.zeusapps.acarsoy.activities.PlantListActivity;
+import ua.in.zeusapps.acarsoy.activities.PlantsActivity;
 
 public class MainActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(ChartActivity.class);
     }
 
+
+    @OnClick(R.id.activity_plant_types)
+    public void showPlantTypes(){
+        startActivity(PlantsActivity.class);
+    }
 
     private void startActivity(Class clazz){
         Intent intent = new Intent(this, clazz);

@@ -66,26 +66,18 @@ public class PlantDetailsActivity extends AppCompatActivity {
     }
 
     private void loadDataAsync() {
-        mAcarsoyService.getPlantsAsync(new IAsyncCommand() {
+        mAcarsoyService.getPlantsAsync(new IAsyncCommand<Object, List<Plant>>() {
             @Override
-            public void onComplete(Object data) {
-                List<Plant> plants;
+            public void onComplete(List<Plant> data) {
 
-                try {
-                    plants = (List<Plant>) data;
-                } catch (Exception ex) {
-                    Toast.makeText(PlantDetailsActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (plants == null) {
+                if (data == null) {
                     Toast.makeText(PlantDetailsActivity.this, R.string.error_while_loading_data, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 Plant curPlant = null;
 
-                for (Plant plant : plants) {
+                for (Plant plant : data) {
                     if (plant.Name.equals(mPlantName)) {
                         curPlant = plant;
                         break;
@@ -122,6 +114,11 @@ public class PlantDetailsActivity extends AppCompatActivity {
             @Override
             public void onError(String error) {
                 Toast.makeText(PlantDetailsActivity.this, error, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public Object getParameters() {
+                return null;
             }
         });
     }

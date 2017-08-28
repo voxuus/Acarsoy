@@ -10,6 +10,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import ua.in.zeusapps.acarsoy.common.IAsyncCommand;
 import ua.in.zeusapps.acarsoy.services.api.AcarsoyApiService;
 import ua.in.zeusapps.acarsoy.services.api.Plant;
+import ua.in.zeusapps.acarsoy.services.api.TokenRequest;
+import ua.in.zeusapps.acarsoy.services.api.TokenResponse;
 
 /**
  * Created by oleg on 17.08.2017.
@@ -41,5 +43,20 @@ public class AcarsoyService {
                 asyncCommand.onError(t.getMessage());
             }
         });
+    }
+
+    public void getTokenAsync(final IAsyncCommand<TokenRequest, TokenResponse> asyncCommand) {
+        mAcarsoyService.getToken(asyncCommand.getParameters().getEmail(), asyncCommand.getParameters().getPassword())
+                .enqueue(new Callback<TokenResponse>() {
+                    @Override
+                    public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                        asyncCommand.onComplete(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<TokenResponse> call, Throwable t) {
+                        asyncCommand.onError(t.getMessage());
+                    }
+                });
     }
 }

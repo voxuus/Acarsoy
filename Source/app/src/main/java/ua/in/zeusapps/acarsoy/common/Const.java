@@ -9,4 +9,6 @@ public class Const {
     public static final String ENERGY_TYPE_COAL = "coal";
     public static final String ENERGY_TYPE_WIND = "wind";
     public static final String EXTRA_PLANT_NAME = "EXTRA_PLANT_NAME";
+    public static final String EXTRA_EMAIL = "EXTRA_EMAIL";
+    public static final String EXTRA_PASSWORD = "EXTRA_PASSWORD";
 }

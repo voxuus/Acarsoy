@@ -1,0 +1,86 @@
+public class Adapter extends GenericAdapter<Plant, Holder> {
+
+        protected Adapter(List<Plant> plants) {
+            super(plants);
+        }
+
+        @Override
+        public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new Holder(getLayoutInflater().inflate(R.layout.template_plant_item, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(Holder holder, int position) {
+            super.onBindViewHolder(holder, position);
+        }
+    }
+
+    public class Holder extends GenericHolder<Plant> {
+
+        ConvertUtils mConvertUtils;
+
+        @BindView(R.id.template_plant_marker_name)
+        TextView mTextViewName;
+
+        @BindView(R.id.template_plant_marker_power)
+        TextView mTextViewPower;
+
+        @BindView(R.id.template_plant_marker_temperature)
+        TextView mTextViewTemperature;
+
+        @BindView(R.id.template_plant_marker_wind)
+        TextView mTextViewWind;
+
+        @BindView(R.id.template_plant_marker_image_holder)
+        FrameLayout mImageHolder;
+
+        @BindView(R.id.template_plant_marker_image)
+        ImageView mImage;
+
+        public Holder(View itemView) {
+            super(itemView);
+            mConvertUtils = new ConvertUtils(getContext());
+        }
+
+        @Override
+        public void update(final Plant plant) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    //TODO use array string in resources
+                    final CharSequence[] items = {"Map", "List", "Details"};
+                    AlertDialog.Builder builder = new AlertDialog.Builder(PlantsActivity.this);
+                    builder.setItems(items, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int item) {
+                            switch (item) {
+                                case 0:
+                                    Intent intent = new Intent(PlantsActivity.this, TurbinesActivity.class);
+                                    intent.putExtra(Const.EXTRA_PLANT_NAME, plant.Name);
+                                    startActivity(intent);
+                                    break;
+                                case 1:
+                                    intent = new Intent(PlantsActivity.this, PlantListActivity.class);
+                                    intent.putExtra(Const.EXTRA_PLANT_NAME, plant.Name);
+                                    startActivity(intent);
+                                    break;
+                                case 2:
+                                    intent = new Intent(PlantsActivity.this, PlantDetailsActivity.class);
+                                    intent.putExtra(Const.EXTRA_PLANT_NAME, plant.Name);
+                                    startActivity(intent);
+                            }
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            });
+
+            mImageHolder.setBackgroundColor(mConvertUtils.getIconBackground(plant.Type));
+            mImage.setBackground(mConvertUtils.getIcon(plant.Type));
+            mTextViewName.setText(plant.Name);
+            mTextViewPower.setText(mConvertUtils.getPower(plant.Power));
+            mTextViewTemperature.setText(mConvertUtils.getTemperature(plant.Temperature));
+            mTextViewWind.setText(mConvertUtils.getWind(plant.Wind));
+        }
+    }

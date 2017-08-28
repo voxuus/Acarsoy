@@ -29,8 +29,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.PlantDetailsActivity" />
-        <activity android:name=".activities.PlantListActivity" />
+        <activity android:name=".activities.TurbineDetailsActivity" />
+        <activity android:name=".activities.TurbinesListActivity" />
         <activity android:name=".activities.TurbinesActivity" />
         <activity android:name=".activities.ChartActivity" />
         <activity android:name=".activities.PlantsActivity" />

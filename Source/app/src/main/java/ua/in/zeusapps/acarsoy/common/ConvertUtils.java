@@ -39,9 +39,9 @@ public class ConvertUtils {
         return ContextCompat.getColor(mContext, colorRes);
     }
 
-    public String getPower(double power) {
+    public String getPowerMWatt(double power) {
         return String.format(
-                mContext.getString(R.string.power_format),
+                mContext.getString(R.string.power_format_mwatt),
                 _df.format(power));
     }
 

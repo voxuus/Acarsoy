@@ -12,4 +12,9 @@
     <color name="colorPlantName">#083f61</color>
 
     <color name="colorTextWhite">#BFFFFFFF</color>
+    <color name="colorIndigo900">#DD1A237E</color>
+    <color name="colorTeal900">#DD004D40</color>
+    <color name="colorIndigo500">#DD5C6BC0</color>
+    <color name="colorDarkBlue">#FF0C2338</color>
+
 </resources>

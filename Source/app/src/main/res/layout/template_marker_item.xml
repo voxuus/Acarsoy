@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/plant_marker_width"
     android:layout_height="@dimen/plant_marker_height"
     android:layout_marginBottom="8dp"
+    android:background="@android:color/transparent"
     android:orientation="horizontal">
 
     <FrameLayout
@@ -20,7 +22,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_margin="2dp"
-            tools:src="@drawable/wind" />
+            tools:src="@drawable/wind"/>
     </FrameLayout>
 
     <FrameLayout
@@ -36,8 +38,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAlignment="center"
+            android:textColor="@color/cardview_dark_background"
             android:textSize="12sp"
-            tools:text="45 C" />
+            android:textStyle="bold"
+            tools:text="45 C"/>
     </FrameLayout>
 
     <LinearLayout
@@ -47,7 +51,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="0dp"
-        android:background="#800c2338"
+        android:background="@color/colorDarkBlue"
         android:gravity="center"
         android:orientation="vertical"
         android:paddingLeft="8dp"
@@ -64,21 +68,21 @@
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold"
-            tools:text="NAME" />
+            tools:text="NAME"/>
 
         <TextView
             android:id="@+id/template_plant_marker_power"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            tools:text="32 MWatt" />
+            tools:text="32 MWatt"/>
 
         <TextView
             android:id="@+id/template_plant_marker_wind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            tools:text="2.02 m/s" />
+            tools:text="2.02 m/s"/>
 
     </LinearLayout>
 

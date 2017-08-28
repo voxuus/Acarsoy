@@ -1,11 +1,11 @@
 package ua.in.zeusapps.acarsoy.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import butterknife.BindView;
@@ -13,7 +13,6 @@ import butterknife.OnClick;
 import ua.in.zeusapps.acarsoy.R;
 import ua.in.zeusapps.acarsoy.common.IAsyncCommand;
 import ua.in.zeusapps.acarsoy.services.AcarsoyService;
-import ua.in.zeusapps.acarsoy.services.LocalDataService;
 import ua.in.zeusapps.acarsoy.services.TokenService;
 import ua.in.zeusapps.acarsoy.services.api.TokenRequest;
 import ua.in.zeusapps.acarsoy.services.api.TokenResponse;
@@ -25,6 +24,12 @@ public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.activity_login_password)
     EditText mEdtTextPassword;
+
+    @BindView(R.id.activity_login_progress)
+    ProgressBar mProgress;
+
+    @BindView(R.id.activity_login_button)
+    Button mBtnLogin;
 
     private AcarsoyService mAcarsoy = new AcarsoyService();
     private TokenService mTokenService = TokenService.getInstance();
@@ -50,6 +55,9 @@ public class LoginActivity extends BaseActivity {
     @OnClick(R.id.activity_login_button)
     public void onBtnLoginClick() {
 
+        mBtnLogin.setVisibility(View.INVISIBLE);
+        mProgress.setVisibility(View.VISIBLE);
+
         mAcarsoy.getTokenAsync(new IAsyncCommand<TokenRequest, TokenResponse>() {
 
             @Override
@@ -57,6 +65,8 @@ public class LoginActivity extends BaseActivity {
 
                 if (data.ErrorCode != 0) {
                     Toast.makeText(LoginActivity.this, data.Message, Toast.LENGTH_SHORT).show();
+                    mBtnLogin.setVisibility(View.VISIBLE);
+                    mProgress.setVisibility(View.INVISIBLE);
                     return;
                 }
 
@@ -65,11 +75,17 @@ public class LoginActivity extends BaseActivity {
 
                 mTokenService.setToken(data.Token);
                 startActivity(PlantsActivity.class);
+
+                mBtnLogin.setVisibility(View.VISIBLE);
+                mProgress.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onError(String error) {
                 Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show();
+
+                mBtnLogin.setVisibility(View.VISIBLE);
+                mProgress.setVisibility(View.INVISIBLE);
             }
 
             @Override

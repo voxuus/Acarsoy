@@ -19,7 +19,7 @@
             android:textAllCaps="true"
             android:textColor="@android:color/white"
             android:textSize="16sp"
-            android:id="@+id/template_plant_productivity_details_power"/>
+            android:id="@+id/activity_turbine_details_power"/>
     </FrameLayout>
 
     <FrameLayout

@@ -1,0 +1,36 @@
+http://acarsoyenerji.robosoftenerji.com/
+логин - test@test.com
+пароль - test
+
+******************************
+token
+******************************
+http://acarsoyenerji.robosoftenerji.com/api/?operation=login&email=test@test.com&password=_test_
+
+
+полченный в результате этого запроса токен нужно использовать в следующих запросах:
+
+http://acarsoyenerji.robosoftenerji.com/api/?operation=mapdata&token=c545c27162949b2a45b3a9f17113236b
+
+http://80.241.218.59/api/?operation=mapdata
+
+"a" => $data[$j]['Name'],
+     "b" => 'wind',
+     "c" => $arrCoord[$data[$j]['Name']]['lat'],
+     "d" => $arrCoord[$data[$j]['Name']]['lng'],
+     "e" => sprintf('%.2f', $data[$j]['Power']),
+     "f" => sprintf('%.2f', $data[$j]['ReactivePower']),
+     "g" => $data[$j]['WindSpeed'],
+     "h" => sprintf('%.2f', $data[$j]['WindDirection']),
+     "i" => $data[$j]['Temperature'],
+     "j" => sprintf('%.2f', $data[$j]['CurrentU']),
+     "k" => sprintf('%.2f', $data[$j]['CurrentV']),
+     "l" => sprintf('%.2f', $data[$j]['CurrentW']),
+     "m" => sprintf('%.2f', $data[$j]['VoltageU']),
+     "n" => sprintf('%.2f', $data[$j]['VoltageV']),
+     "o" => sprintf('%.2f', $data[$j]['VoltageW']),
+     "u" => sprintf('%.2f', $data[$j]['Frequency']),
+     "p" => intval($error),
+     "plant" => $plants[$i]['name']
+
+http://80.241.218.59/api/?operation=turbinedata&plant=dinar&turbine=T81

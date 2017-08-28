@@ -5,14 +5,14 @@ public class PlantProductivity {
     private double _wind;
 
     private int _hour;
-    private PlantType _plantType;
+    private String _plantType;
 
     public PlantProductivity(double power, double wind) {
         _power = power;
         _wind = wind;
     }
 
-    public PlantProductivity(double power, double wind, int hour, PlantType plantType) {
+    public PlantProductivity(double power, double wind, int hour, String plantType) {
         _power = power;
         _wind = wind;
         _hour = hour;
@@ -27,7 +27,7 @@ public class PlantProductivity {
         return _hour;
     }
 
-    public PlantType getPlantType() {
+    public String getPlantType() {
         return _plantType;
     }
 

@@ -20,8 +20,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.in.zeusapps.acarsoy.R;
+import ua.in.zeusapps.acarsoy.common.Const;
 import ua.in.zeusapps.acarsoy.models.PlantProductivity;
-import ua.in.zeusapps.acarsoy.models.PlantType;
 import ua.in.zeusapps.acarsoy.services.FakePlantService;
 import ua.in.zeusapps.acarsoy.services.IPlantService;
 
@@ -41,25 +41,25 @@ public class ChartActivity extends AppCompatActivity {
         populateChart();
     }
 
-    private void populateChart(){
+    private void populateChart() {
         List<PlantProductivity> productivities = _plantService.getPlantsProductivityByHours();
 
         List<Entry> coalEntries = new ArrayList<>();
         List<Entry> windEntries = new ArrayList<>();
 
-        for (PlantProductivity productivity: productivities){
+        for (PlantProductivity productivity : productivities) {
             Entry entry = new Entry(productivity.getHour(), (float) productivity.getPower());
-            if (productivity.getPlantType().equals(PlantType.Coal)){
+            if (productivity.getPlantType().equals(Const.ENERGY_TYPE_COAL)) {
                 coalEntries.add(entry);
             } else {
                 windEntries.add(entry);
             }
         }
 
-        LineDataSet coalDataSet = new LineDataSet(coalEntries, "Coal");
+        LineDataSet coalDataSet = new LineDataSet(coalEntries,Const.ENERGY_TYPE_COAL);
         coalDataSet.setColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
         coalDataSet.setLineWidth(3f);
-        LineDataSet windDataSet = new LineDataSet(windEntries, "Wind");
+        LineDataSet windDataSet = new LineDataSet(windEntries, Const.ENERGY_TYPE_WIND);
         windDataSet.setColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
         windDataSet.setLineWidth(3f);
         LineData line = new LineData(coalDataSet, windDataSet);
@@ -71,7 +71,7 @@ public class ChartActivity extends AppCompatActivity {
         setYAxis(_chart.getAxisRight());
     }
 
-    private void setXAxis(XAxis axis){
+    private void setXAxis(XAxis axis) {
         axis.setPosition(XAxis.XAxisPosition.BOTTOM);
         axis.setTextSize(10f);
         axis.setDrawAxisLine(true);

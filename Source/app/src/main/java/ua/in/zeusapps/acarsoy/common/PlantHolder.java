@@ -1,3 +1,6 @@
+//TODO delete
+
+/*
 package ua.in.zeusapps.acarsoy.common;
 
 import android.graphics.drawable.Drawable;
@@ -19,7 +22,7 @@ public abstract class PlantHolder extends GenericHolder<Plant> {
     }
 
     protected Drawable getIcon(Plant plant){
-        int iconRes = plant.getType() == PlantType.Coal
+        int iconRes = plant.getType() == PlantType.geo
                 ? R.drawable.coal
                 : R.drawable.wind;
 
@@ -27,7 +30,7 @@ public abstract class PlantHolder extends GenericHolder<Plant> {
     }
 
     protected int getIconBackground(Plant plant){
-        int colorRes = plant.getType() == PlantType.Coal
+        int colorRes = plant.getType() == PlantType.geo
                 ? R.color.colorCoal
                 : R.color.colorWind;
 
@@ -54,3 +57,4 @@ public abstract class PlantHolder extends GenericHolder<Plant> {
         );
     }
 }
+*/

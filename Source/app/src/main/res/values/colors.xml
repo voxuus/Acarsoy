@@ -10,4 +10,6 @@
     <color name="colorPower">#18496a</color>
     <color name="colorWindSpeed">#235372</color>
     <color name="colorPlantName">#083f61</color>
+
+    <color name="colorTextWhite">#BFFFFFFF</color>
 </resources>

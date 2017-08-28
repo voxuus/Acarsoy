@@ -3,5 +3,5 @@
     <dimen name="activity_login_view_width">240dp</dimen>
     <dimen name="plant_icon_size">64dp</dimen>
     <dimen name="plant_marker_height">64dp</dimen>
-    <dimen name="plant_marker_width">240dp</dimen>
+    <dimen name="plant_marker_width">180dp</dimen>
 </resources>

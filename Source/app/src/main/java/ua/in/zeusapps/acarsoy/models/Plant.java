@@ -1,10 +1,14 @@
+//TODO delete
+
+/*
 package ua.in.zeusapps.acarsoy.models;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
-public class Plant
+public class PlantDELETE
     implements ClusterItem {
+
     private String _name;
     private PlantType _type;
     private double _power;
@@ -29,6 +33,7 @@ public class Plant
         _position = position;
     }
 
+    @Override
     public LatLng getPosition() {
         return _position.toLatLng();
     }
@@ -87,3 +92,4 @@ public class Plant
         _temperature = temperature;
     }
 }
+*/

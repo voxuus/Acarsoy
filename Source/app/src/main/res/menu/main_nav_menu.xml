@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/group_nav_1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/main_nav_menu_plants"
+            android:icon="@drawable/ic_map"
+            android:title="Plants" />
+        <item
+            android:id="@+id/main_nav_menu_turbines"
+            android:icon="@drawable/ic_turbine"
+            android:title="Turbines" />
+
+    </group>
+    <group
+        android:id="@+id/group_nav_2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/main_nav_menu_exit"
+            android:icon="@drawable/ic_exit"
+            android:title="Exit" />
+    </group>
+</menu>

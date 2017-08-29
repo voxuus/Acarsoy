@@ -1,6 +1,7 @@
 package ua.in.zeusapps.acarsoy.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -45,7 +46,12 @@ public class PlantsActivity extends BaseNavActivity {
 
     private GoogleMap _map;
     private ClusterManager<Plant> _manager;
-    private AcarsoyService mAcarsoyService = new AcarsoyService();
+    private AcarsoyService mAcarsoyService;
+
+    @BindView(R.id.activity_plants_txt_total_power)
+    TextView mTxtTotalPower;
+
+    private ConvertUtils mConvertUtils;
 
     @Override
     protected int getLayoutId() {
@@ -61,7 +67,13 @@ public class PlantsActivity extends BaseNavActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initServices();
         initMap();
+    }
+
+    private void initServices() {
+        mAcarsoyService = new AcarsoyService();
+        mConvertUtils = new ConvertUtils(this);
     }
 
     private void initMap() {
@@ -95,20 +107,20 @@ public class PlantsActivity extends BaseNavActivity {
             public void onComplete(List<Plant> data) {
 
                 if (data == null) {
-                    Toast.makeText(PlantsActivity.this, getString(R.string.error_while_loading_data), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlantsActivity.this, getString(R.string.msg_while_loading_data), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 _manager.addItems(data);
+                showTotalPower(data);
 
                 Plant zoomPlant = data.get(0);
                 if (zoomPlant == null) {
-                    Toast.makeText(PlantsActivity.this, R.string.error_while_loading_data, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlantsActivity.this, R.string.msg_while_loading_data, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 moveCamera(zoomPlant.Latitude, zoomPlant.Longitude);
-
             }
 
             @Override
@@ -123,6 +135,18 @@ public class PlantsActivity extends BaseNavActivity {
         });
     }
 
+    private void showTotalPower(List<Plant> data) {
+
+        double res = 0.0;
+
+        for (Plant plant : data) {
+            res += plant.Power;
+        }
+
+        mTxtTotalPower.setText(mConvertUtils.getPowerMWatt(res));
+
+    }
+
     private void moveCamera(double latitude, double longitude) {
         _map.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(
                 new LatLng(latitude, longitude), 10f)));
@@ -130,8 +154,21 @@ public class PlantsActivity extends BaseNavActivity {
 
     @Override
     public void onBackPressed() {
-        //TODO dialog to exit
         new AlertDialog.Builder(this)
+                .setTitle(R.string.app_name)
+                .setMessage(R.string.msg_do_you_want_to_exit)
+                .setPositiveButton(R.string.msg_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        exitApp();
+                    }
+                })
+                .setNegativeButton(R.string.msg_no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
                 .create()
                 .show();
 
@@ -171,7 +208,7 @@ public class PlantsActivity extends BaseNavActivity {
             _image.setBackground(mConvertUtils.getIcon(plant.Type));
             _temperature.setText(mConvertUtils.getTemperature(plant.Temperature));
             _name.setText(plant.Name);
-            _power.setText(mConvertUtils.getPower(plant.Power));
+            _power.setText(mConvertUtils.getPowerMWatt(plant.Power));
             _wind.setText(mConvertUtils.getWind(plant.Wind));
         }
     }

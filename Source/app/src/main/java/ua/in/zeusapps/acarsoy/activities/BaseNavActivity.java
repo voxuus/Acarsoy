@@ -4,7 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -22,11 +26,30 @@ public abstract class BaseNavActivity extends BaseActivity {
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
+    @BindView(R.id.toolbar_img_acarsoy)
+    ImageView mImgAcarsoy;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initToolbar();
         initNavigation();
+    }
+
+    protected void initToolbar() {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(null);
+
+        mImgAcarsoy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.openDrawer(Gravity.START);
+            }
+        });
     }
 
     protected abstract int getCheckedNavId();
@@ -44,6 +67,9 @@ public abstract class BaseNavActivity extends BaseActivity {
                         break;
                     case R.id.main_nav_menu_turbines:
                         startActivity(TurbinesActivity.class);
+                        break;
+                    case R.id.main_nav_menu_turbines_list:
+                        startActivity(TurbinesListActivity.class);
                         break;
                     case R.id.main_nav_menu_exit:
                         exitApp();

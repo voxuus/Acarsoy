@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorDarkBlue"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <ImageView
+                android:id="@+id/toolbar_img_acarsoy"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/acarsoy"/>
+
+        </android.support.v7.widget.Toolbar>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/turbines"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:background="@color/colorIndigo900">
+
+                    <TextView
+                        android:id="@+id/activity_turbine_details_txt_turbine_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="16sp"
+                        android:gravity="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="24sp"
+                        tools:text="T1"/>
+
+                    <TextView
+                        android:id="@+id/activity_turbine_details_txt_plant_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        tools:text="Sarikavak res"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:id="@+id/activity_plant_details_image_holder"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:background="@android:color/transparent"
+                            tools:background="@color/cardview_dark_background">
+
+                            <ImageView
+                                android:id="@+id/activity_plant_details_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="8dp"
+                                tools:src="@drawable/wind"/>
+
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:id="@+id/view"
+                            android:layout_width="64dp"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            tools:background="@color/cardview_dark_background">
+
+                            <TextView
+                                android:id="@+id/activity_plant_details_temperature"
+                                android:layout_width="64dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:padding="8dp"
+                                android:textAlignment="center"
+                                android:textColor="@android:color/white"
+                                android:textStyle="bold"
+                                tools:text="34 C"/>
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorPower">
+
+                        <TextView
+                            android:id="@+id/activity_turbine_details_power"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:text="32 MWatt"/>
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorWindSpeed">
+
+                        <TextView
+                            android:id="@+id/activity_turbine_details_wind"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:text="2.02 m/s"/>
+                    </FrameLayout>
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="36dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/compass"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/compass_mark"
+                        android:id="@+id/activity_turbine_details_wind_direction"/>
+
+                </FrameLayout>
+
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view_main"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/main_nav_menu"/>
+
+</android.support.v4.widget.DrawerLayout>
+
+
+
+
+
+

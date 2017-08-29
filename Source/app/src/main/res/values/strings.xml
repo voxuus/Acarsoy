@@ -4,9 +4,17 @@
     <string name="activity_login_button">Giris yap</string>
     <string name="activity_login_password">Password</string>
     <string name="activity_login_username">Email</string>
-    <string name="power_format">%s kW</string>
+    <string name="power_format_kwatt">%s KWatt</string>
+    <string name="power_format_mwatt">%s MWatt</string>
     <string name="wind_format">%s m/s</string>
     <string name="temperature">%s°C</string>
     <string name="title_activity_maps">Map</string>
-    <string name="error_while_loading_data">Error while loading data</string>
+    <string name="msg_while_loading_data">Error while loading data</string>
+    <string name="msg_do_you_want_to_exit">Do you want to exit?</string>
+    <string name="msg_yes">Yes</string>
+    <string name="msg_no">No</string>
+    <string name="toplam">toplam</string>
+    <string name="navigation_drawer_open">Drawer Open</string>
+    <string name="navigation_drawer_close">Drawer Closed</string>
+    <string name="listeye_goster">Listeye Goster</string>
 </resources>

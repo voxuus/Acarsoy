@@ -1,12 +1,14 @@
 package ua.in.zeusapps.acarsoy.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,14 +20,17 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.google.maps.android.ui.IconGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import ua.in.zeusapps.acarsoy.R;
 import ua.in.zeusapps.acarsoy.common.Const;
 import ua.in.zeusapps.acarsoy.common.ConvertUtils;
@@ -34,13 +39,21 @@ import ua.in.zeusapps.acarsoy.common.IAsyncCommand;
 import ua.in.zeusapps.acarsoy.services.AcarsoyService;
 import ua.in.zeusapps.acarsoy.services.api.Plant;
 
-public class TurbinesActivity extends BaseActivity {
+public class TurbinesActivity extends BaseNavActivity {
 
     private GoogleMap _map;
     private ClusterManager<Plant.Turbine> _manager;
 
-    private AcarsoyService mAcarsoyService = new AcarsoyService();
+    private AcarsoyService mAcarsoyService;
+    private ConvertUtils mConvertUtils;
+
     private String mPlantName;
+
+    @BindView(R.id.activity_turbines_txt_total_power)
+    TextView mTxtTotalPower;
+
+    @BindView(R.id.activity_turbines_progress)
+    ProgressBar mProgressBar;
 
     @Override
     protected int getLayoutId() {
@@ -52,12 +65,21 @@ public class TurbinesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         mPlantName = getIntent().getStringExtra(Const.EXTRA_PLANT_NAME);
-
+        initServices();
         initMap();
     }
 
-    private void initMap() {
+    private void initServices() {
+        mAcarsoyService = new AcarsoyService();
+        mConvertUtils = new ConvertUtils(this);
+    }
 
+    @Override
+    protected int getCheckedNavId() {
+        return R.id.main_nav_menu_turbines;
+    }
+
+    private void initMap() {
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.activity_turbines_map)).getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -68,8 +90,10 @@ public class TurbinesActivity extends BaseActivity {
                 _manager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<Plant.Turbine>() {
                     @Override
                     public boolean onClusterItemClick(Plant.Turbine turbine) {
-                        Toast.makeText(TurbinesActivity.this, turbine.Name, Toast.LENGTH_SHORT).show();
-                        return false;
+                        Intent intent = new Intent(TurbinesActivity.this, TurbineDetailsActivity.class);
+                        intent.putExtra(Const.EXTRA_TURBINE_JSON, new Gson().toJson(turbine));
+                        startActivity(intent);
+                        return true;
                     }
                 });
                 _map.setOnCameraIdleListener(_manager);
@@ -86,12 +110,18 @@ public class TurbinesActivity extends BaseActivity {
 
     private void loadTurbinesAsync() {
 
+        mTxtTotalPower.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
+
         mAcarsoyService.getPlantsAsync(new IAsyncCommand<Object, List<Plant>>() {
             @Override
             public void onComplete(List<Plant> data) {
 
                 if (data == null) {
-                    Toast.makeText(TurbinesActivity.this, R.string.error_while_loading_data, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TurbinesActivity.this, R.string.msg_while_loading_data, Toast.LENGTH_SHORT).show();
+
+                    mTxtTotalPower.setVisibility(View.VISIBLE);
+                    mProgressBar.setVisibility(View.INVISIBLE);
                     return;
                 }
 
@@ -104,25 +134,40 @@ public class TurbinesActivity extends BaseActivity {
                     }
                 }
 
+                List<Plant.Turbine> turbines = new ArrayList<>();
+
                 if (curPlant == null) {
-                    Toast.makeText(TurbinesActivity.this, R.string.error_while_loading_data, Toast.LENGTH_SHORT).show();
+                    for (Plant plant : data) {
+                        turbines.addAll(plant.Turbines);
+                    }
+                } else {
+                    turbines.addAll(curPlant.Turbines);
+                }
+
+                if (turbines.size() == 0) {
+                    Toast.makeText(TurbinesActivity.this, R.string.msg_while_loading_data, Toast.LENGTH_SHORT).show();
+
+                    mTxtTotalPower.setVisibility(View.VISIBLE);
+                    mProgressBar.setVisibility(View.INVISIBLE);
                     return;
                 }
 
-                _manager.addItems(curPlant.Turbines);
+                _manager.addItems(turbines);
+                showTotalPower(turbines);
 
-                Plant.Turbine zoomTurbine = curPlant.Turbines.get(0);
-                if (zoomTurbine == null) {
-                    Toast.makeText(TurbinesActivity.this, R.string.error_while_loading_data, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
+                Plant.Turbine zoomTurbine = turbines.get(0);
                 moveCamera(zoomTurbine.Latitude, zoomTurbine.Longitude);
+
+                mTxtTotalPower.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onError(String error) {
                 Toast.makeText(TurbinesActivity.this, error, Toast.LENGTH_SHORT).show();
+
+                mTxtTotalPower.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -130,6 +175,23 @@ public class TurbinesActivity extends BaseActivity {
                 return null;
             }
         });
+    }
+
+    private void showTotalPower(List<Plant.Turbine> turbines) {
+
+        double res = 0.0;
+        for (Plant.Turbine turbine : turbines) {
+            res += turbine.Power;
+        }
+
+        mTxtTotalPower.setText(mConvertUtils.getPowerMWatt(res));
+    }
+
+    @OnClick(R.id.activity_turbines_layout_show_list)
+    public void onClickShowList() {
+        Intent intent = new Intent(this, TurbinesListActivity.class);
+        intent.putExtra(Const.EXTRA_PLANT_NAME, mPlantName);
+        startActivity(intent);
     }
 
     class MarkerHolder extends GenericHolder<Plant.Turbine> {
@@ -166,7 +228,7 @@ public class TurbinesActivity extends BaseActivity {
             _image.setBackground(mConvertUtils.getIcon(turbine.Type));
             _temperature.setText(mConvertUtils.getTemperature(turbine.Temperature));
             _name.setText(turbine.Name);
-            _power.setText(mConvertUtils.getPower(turbine.Power));
+            _power.setText(mConvertUtils.getPowerMWatt(turbine.Power));
             _wind.setText(mConvertUtils.getWind(turbine.WindSpeed));
         }
     }

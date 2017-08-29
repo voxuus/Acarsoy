@@ -68,7 +68,7 @@ public class PlantDELETE
         _type = type;
     }
 
-    public double getPower() {
+    public double getPowerMWatt() {
         return _power;
     }
 

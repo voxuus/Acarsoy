@@ -1,7 +1,7 @@
 package ua.in.zeusapps.acarsoy.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import ua.in.zeusapps.acarsoy.R;
 import ua.in.zeusapps.acarsoy.common.Const;
 import ua.in.zeusapps.acarsoy.common.ConvertUtils;
@@ -24,10 +26,7 @@ import ua.in.zeusapps.acarsoy.common.IAsyncCommand;
 import ua.in.zeusapps.acarsoy.services.AcarsoyService;
 import ua.in.zeusapps.acarsoy.services.api.Plant;
 
-public class PlantListActivity extends AppCompatActivity {
-
-    //TODO remove fake data
-    //private final IPlantService _plantService = new FakePlantService();
+public class TurbinesListActivity extends BaseNavActivity {
 
     private final AcarsoyService mAcarsoyService = new AcarsoyService();
 
@@ -37,15 +36,32 @@ public class PlantListActivity extends AppCompatActivity {
     private String mPlantName;
 
     @Override
+    protected int getLayoutId() {
+        return R.layout.activity_turbines_list;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plant_list);
 
         mPlantName = getIntent().getStringExtra(Const.EXTRA_PLANT_NAME);
 
-        ButterKnife.bind(this);
         initRecyclerView();
         loadDataAsync();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
+    @Override
+    protected int getCheckedNavId() {
+        return R.id.main_nav_menu_turbines_list;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
     }
 
     private void loadDataAsync() {
@@ -54,7 +70,7 @@ public class PlantListActivity extends AppCompatActivity {
             public void onComplete(List<Plant> data) {
 
                 if (data == null) {
-                    Toast.makeText(PlantListActivity.this, R.string.error_while_loading_data, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TurbinesListActivity.this, R.string.msg_while_loading_data, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -67,17 +83,28 @@ public class PlantListActivity extends AppCompatActivity {
                     }
                 }
 
+                List<Plant.Turbine> turbines = new ArrayList<>();
+
                 if (curPlant == null) {
-                    Toast.makeText(PlantListActivity.this, R.string.error_while_loading_data, Toast.LENGTH_SHORT).show();
+                    for (Plant plant :
+                            data) {
+                        turbines.addAll(plant.Turbines);
+                    }
+                } else {
+                    turbines.addAll(curPlant.Turbines);
+                }
+
+                if (turbines.size() == 0) {
+                    Toast.makeText(TurbinesListActivity.this, R.string.msg_while_loading_data, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                _recyclerView.setAdapter(new Adapter(curPlant.Turbines));
+                _recyclerView.setAdapter(new Adapter(turbines));
             }
 
             @Override
             public void onError(String error) {
-                Toast.makeText(PlantListActivity.this, error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(TurbinesListActivity.this, error, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -101,8 +128,11 @@ public class PlantListActivity extends AppCompatActivity {
         @BindView(R.id.template_plant_item_icon)
         ImageView _icon;
 
-        @BindView(R.id.template_plant_item_name)
-        TextView _nameTextView;
+        @BindView(R.id.template_plant_card_txt_plant)
+        TextView mTxtViewPlantName;
+
+        @BindView(R.id.template_plant_card_txt_turbine)
+        TextView mTxtViewTurbineName;
 
         @BindView(R.id.template_plant_item_power)
         TextView _powerTextView;
@@ -113,19 +143,32 @@ public class PlantListActivity extends AppCompatActivity {
         @BindView(R.id.template_plant_item_temperature)
         TextView _temperatureTextView;
 
+        @BindView(R.id.template_plant_card_item_card)
+        View _mainLayout;
+
         Holder(View itemView) {
             super(itemView);
             mConvertUtils = new ConvertUtils(getContext());
         }
 
         @Override
-        public void update(Plant.Turbine plant) {
-            _icon.setBackground(mConvertUtils.getIcon(plant.Type));
-            _iconHolder.setBackgroundColor(mConvertUtils.getIconBackground(plant.Type));
-            _nameTextView.setText(plant.Name);
-            _powerTextView.setText(mConvertUtils.getPower(plant.Power));
-            _windTextView.setText(mConvertUtils.getWind(plant.WindSpeed));
-            _temperatureTextView.setText(mConvertUtils.getTemperature(plant.Temperature));
+        public void update(final Plant.Turbine turbine) {
+            _icon.setBackground(mConvertUtils.getIcon(turbine.Type));
+            _iconHolder.setBackgroundColor(mConvertUtils.getIconBackground(turbine.Type));
+            mTxtViewPlantName.setText(turbine.PlantName);
+            mTxtViewTurbineName.setText(turbine.Name);
+            _powerTextView.setText(mConvertUtils.getPowerMWatt(turbine.Power));
+            _windTextView.setText(mConvertUtils.getWind(turbine.WindSpeed));
+            _temperatureTextView.setText(mConvertUtils.getTemperature(turbine.Temperature));
+
+            _mainLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(TurbinesListActivity.this, TurbineDetailsActivity.class);
+                    intent.putExtra(Const.EXTRA_TURBINE_JSON, new Gson().toJson(turbine));
+                    startActivity(intent);
+                }
+            });
         }
     }
 

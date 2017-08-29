@@ -27,7 +27,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         mLocalDbService = new LocalDataService(getSharedPreferences(getPackageName(), MODE_PRIVATE));
     }
 
-
     protected void startActivity(Class clazz) {
         Intent intent = new Intent(this, clazz);
         startActivity(intent);

@@ -13,7 +13,7 @@ import retrofit2.http.Query;
 public interface AcarsoyApiService {
 
     @GET("api/?operation=mapdata")
-    Call<List<Plant>> getMapData();
+    Call<List<Plant>> getMapData(@Query("token") String token);
 
     @GET("api/?operation=login")
     Call<TokenResponse> getToken(@Query("email") String email, @Query("password") String password);

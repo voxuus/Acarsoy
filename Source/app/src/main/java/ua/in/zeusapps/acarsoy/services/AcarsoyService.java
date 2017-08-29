@@ -20,6 +20,7 @@ import ua.in.zeusapps.acarsoy.services.api.TokenResponse;
 public class AcarsoyService {
 
     private AcarsoyApiService mAcarsoyService;
+    private TokenService mTokenService;
 
     public AcarsoyService() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -28,11 +29,12 @@ public class AcarsoyService {
                 .build();
 
         mAcarsoyService = retrofit.create(AcarsoyApiService.class);
+        mTokenService = TokenService.getInstance();
 
     }
 
     public void getPlantsAsync(final IAsyncCommand asyncCommand) {
-        mAcarsoyService.getMapData().enqueue(new Callback<List<Plant>>() {
+        mAcarsoyService.getMapData(mTokenService.getToken()).enqueue(new Callback<List<Plant>>() {
             @Override
             public void onResponse(Call<List<Plant>> call, Response<List<Plant>> response) {
                 asyncCommand.onComplete(response.body());

@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -97,7 +100,12 @@ public class TurbineDetailsActivity extends BaseNavActivity {
         mTxtViewPower.setText(mConvertUtils.getPowerMWatt(mTurbine.Power));
         mTxtViewWind.setText(mConvertUtils.getWind(mTurbine.WindSpeed));
 
-        mImgWindDirection.setRotation((float) (mTurbine.WindDirection));
+        RotateAnimation rotate = new RotateAnimation(0, (float) mTurbine.WindDirection, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(350);
+        rotate.setInterpolator(new LinearInterpolator());
+        rotate.setFillEnabled(true);
+        rotate.setFillAfter(true);
+        mImgWindDirection.startAnimation(rotate);
     }
 
     @Override

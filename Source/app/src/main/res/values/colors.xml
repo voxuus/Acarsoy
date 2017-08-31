@@ -16,5 +16,6 @@
     <color name="colorTeal900">#DD004D40</color>
     <color name="colorIndigo500">#DD5C6BC0</color>
     <color name="colorDarkBlue">#FF0C2338</color>
+    <color name="colorRed700">#D32F2F</color>
 
 </resources>

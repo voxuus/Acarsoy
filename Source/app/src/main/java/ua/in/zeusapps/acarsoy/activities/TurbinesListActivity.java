@@ -157,7 +157,7 @@ public class TurbinesListActivity extends BaseNavActivity {
             _iconHolder.setBackgroundColor(mConvertUtils.getIconBackground(turbine.Type));
             mTxtViewPlantName.setText(turbine.PlantName);
             mTxtViewTurbineName.setText(turbine.Name);
-            _powerTextView.setText(mConvertUtils.getPowerMWatt(turbine.Power));
+            _powerTextView.setText(mConvertUtils.getPowerKWatt(turbine.Power));
             _windTextView.setText(mConvertUtils.getWind(turbine.WindSpeed));
             _temperatureTextView.setText(mConvertUtils.getTemperature(turbine.Temperature));
 

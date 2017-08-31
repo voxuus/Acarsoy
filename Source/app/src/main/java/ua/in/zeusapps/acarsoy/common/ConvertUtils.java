@@ -58,4 +58,10 @@ public class ConvertUtils {
                 _df.format(temp)
         );
     }
+
+    public String getPowerKWatt(double power) {
+        return String.format(
+                mContext.getString(R.string.power_format_kwatt),
+                _df.format(power));
+    }
 }

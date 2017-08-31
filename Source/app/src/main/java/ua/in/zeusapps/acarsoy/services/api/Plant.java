@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.maps.android.clustering.ClusterItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,7 +48,7 @@ public class Plant implements ClusterItem {
 
     @SerializedName("buildings")
     @Expose
-    public List<Turbine> Turbines = null;
+    public List<Turbine> Turbines = new ArrayList<>();
 
     @SerializedName("wind")
     @Expose

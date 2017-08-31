@@ -120,7 +120,7 @@ public class PlantsActivity extends BaseNavActivity {
                     return;
                 }
 
-                moveCamera(zoomPlant.Latitude, zoomPlant.Longitude);
+                moveCamera(data);
             }
 
             @Override
@@ -135,6 +135,19 @@ public class PlantsActivity extends BaseNavActivity {
         });
     }
 
+    private void moveCamera(List<Plant> data) {
+        double lat = 0.0;
+        double lng = 0.0;
+
+        for (Plant plant : data) {
+            lat += plant.Latitude;
+            lng += plant.Longitude;
+        }
+
+        _map.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(
+                new LatLng(lat / data.size(), lng / data.size()), 5f)));
+    }
+
     private void showTotalPower(List<Plant> data) {
 
         double res = 0.0;
@@ -145,11 +158,6 @@ public class PlantsActivity extends BaseNavActivity {
 
         mTxtTotalPower.setText(mConvertUtils.getPowerMWatt(res));
 
-    }
-
-    private void moveCamera(double latitude, double longitude) {
-        _map.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(
-                new LatLng(latitude, longitude), 10f)));
     }
 
     @Override
@@ -221,12 +229,12 @@ public class PlantsActivity extends BaseNavActivity {
         PlantRenderer(Context context, GoogleMap map, ClusterManager<Plant> clusterManager) {
             super(context, map, clusterManager);
 
-            _iconGenerator = new IconGenerator(context);
-            View view = getLayoutInflater().inflate(R.layout.template_marker_item, null);
+            View view = getLayoutInflater().inflate(R.layout.template_marker_plant, null);
             int width = (int) getResources().getDimension(R.dimen.plant_marker_width);
             int height = (int) getResources().getDimension(R.dimen.plant_marker_height);
             view.setLayoutParams(new ViewGroup.LayoutParams(width, height));
 
+            _iconGenerator = new IconGenerator(context);
             _iconGenerator.setContentView(view);
             _holder = new MarkerHolder(view);
         }

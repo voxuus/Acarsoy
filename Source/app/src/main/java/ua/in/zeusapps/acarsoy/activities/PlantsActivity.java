@@ -87,6 +87,10 @@ public class PlantsActivity extends BaseNavActivity {
                 _manager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<Plant>() {
                     @Override
                     public boolean onClusterItemClick(Plant plant) {
+                        if (plant.Type.equals(Const.ENERGY_TYPE_COAL)) {
+                            return true;
+                        }
+
                         Intent intent = new Intent(PlantsActivity.this, TurbinesActivity.class);
                         intent.putExtra(Const.EXTRA_PLANT_NAME, plant.Name);
                         startActivity(intent);
@@ -217,7 +221,8 @@ public class PlantsActivity extends BaseNavActivity {
             _temperature.setText(mConvertUtils.getTemperature(plant.Temperature));
             _name.setText(plant.Name);
             _power.setText(mConvertUtils.getPowerMWatt(plant.Power));
-            _wind.setText(mConvertUtils.getWind(plant.Wind));
+            _wind.setText(plant.Type.equals(Const.ENERGY_TYPE_WIND) ? mConvertUtils.getWind(plant.Wind) : null);
+            _wind.setVisibility(plant.Type.equals(Const.ENERGY_TYPE_WIND) ? View.VISIBLE : View.GONE);
         }
     }
 

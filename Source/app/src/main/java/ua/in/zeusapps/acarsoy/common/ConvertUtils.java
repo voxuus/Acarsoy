@@ -7,7 +7,6 @@ import android.support.v4.content.ContextCompat;
 import java.text.DecimalFormat;
 
 import ua.in.zeusapps.acarsoy.R;
-import ua.in.zeusapps.acarsoy.services.api.Plant;
 
 /**
  * Created by oleg on 17.08.2017.

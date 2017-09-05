@@ -73,112 +73,89 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_margin="16dp"
                     android:orientation="horizontal">
 
-                    <LinearLayout
+                    <FrameLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent">
 
-                        <FrameLayout
-                            android:id="@+id/activity_plant_details_image_holder"
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:background="@android:color/transparent"
-                            tools:background="@color/cardview_dark_background">
-
-                            <ImageView
-                                android:id="@+id/activity_plant_details_image"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="8dp"
-                                tools:src="@drawable/wind"/>
-
-                        </FrameLayout>
-
-                        <FrameLayout
-                            android:id="@+id/view"
-                            android:layout_width="64dp"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            tools:background="@color/cardview_dark_background">
+                            android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/activity_plant_details_temperature"
+                            <FrameLayout
+                                android:id="@+id/activity_plant_details_image_holder"
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:background="@android:color/transparent"
+                                tools:background="@color/cardview_dark_background">
+
+                                <ImageView
+                                    android:id="@+id/activity_plant_details_image"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="8dp"
+                                    tools:src="@drawable/wind"/>
+
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:id="@+id/view"
                                 android:layout_width="64dp"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:padding="8dp"
-                                android:textAlignment="center"
-                                android:textColor="@android:color/white"
-                                android:textStyle="bold"
-                                tools:text="34 C"/>
+                                android:background="@android:color/transparent"
+                                tools:background="@color/cardview_dark_background">
 
-                        </FrameLayout>
+                                <TextView
+                                    android:id="@+id/activity_plant_details_temperature"
+                                    android:layout_width="64dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:padding="8dp"
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/white"
+                                    android:textStyle="bold"
+                                    tools:text="34 C"/>
 
-                    </LinearLayout>
+                            </FrameLayout>
 
+                            <FrameLayout
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:layout_marginTop="8dp">
 
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/colorPower">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/compass"/>
 
-                        <TextView
-                            android:id="@+id/activity_turbine_details_power"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:textAlignment="center"
-                            android:textAllCaps="true"
+                                <ImageView
+                                    android:id="@+id/activity_turbine_details_wind_direction"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/compass_mark"/>
 
-                            android:textColor="@android:color/white"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            tools:text="32 MWatt"/>
+                            </FrameLayout>
+
+                        </LinearLayout>
+
                     </FrameLayout>
 
                     <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/colorWindSpeed">
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                        <TextView
-                            android:id="@+id/activity_turbine_details_wind"
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/activity_turbine_details_recycler"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:textAlignment="center"
-                            android:textColor="@android:color/white"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            tools:text="2.02 m/s"/>
+                            android:layout_height="match_parent"/>
+
                     </FrameLayout>
+
                 </LinearLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="36dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/compass"/>
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/compass_mark"
-                        android:id="@+id/activity_turbine_details_wind_direction"/>
-
-                </FrameLayout>
 
             </LinearLayout>
         </FrameLayout>

@@ -36,7 +36,7 @@ import ua.in.zeusapps.acarsoy.common.ConvertUtils;
 import ua.in.zeusapps.acarsoy.common.GenericHolder;
 import ua.in.zeusapps.acarsoy.common.IAsyncCommand;
 import ua.in.zeusapps.acarsoy.services.AcarsoyService;
-import ua.in.zeusapps.acarsoy.services.api.Plant;
+import ua.in.zeusapps.acarsoy.services.api.PlantResponse;
 
 /**
  * Created by oleg on 17.08.2017.
@@ -45,7 +45,7 @@ import ua.in.zeusapps.acarsoy.services.api.Plant;
 public class PlantsActivity extends BaseNavActivity {
 
     private GoogleMap _map;
-    private ClusterManager<Plant> _manager;
+    private ClusterManager<PlantResponse> _manager;
     private AcarsoyService mAcarsoyService;
 
     @BindView(R.id.activity_plants_txt_total_power)
@@ -84,9 +84,9 @@ public class PlantsActivity extends BaseNavActivity {
                 _map.getUiSettings().setZoomControlsEnabled(true);
                 _manager = new ClusterManager<>(PlantsActivity.this, googleMap);
                 _manager.setRenderer(new PlantRenderer(PlantsActivity.this, googleMap, _manager));
-                _manager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<Plant>() {
+                _manager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<PlantResponse>() {
                     @Override
-                    public boolean onClusterItemClick(Plant plant) {
+                    public boolean onClusterItemClick(PlantResponse plant) {
                         if (plant.Type.equals(Const.ENERGY_TYPE_COAL)) {
                             return true;
                         }
@@ -106,9 +106,9 @@ public class PlantsActivity extends BaseNavActivity {
     }
 
     private void loadPlantsAsync() {
-        mAcarsoyService.getPlantsAsync(new IAsyncCommand<Object, List<Plant>>() {
+        mAcarsoyService.getPlantsAsync(new IAsyncCommand<Object, List<PlantResponse>>() {
             @Override
-            public void onComplete(List<Plant> data) {
+            public void onComplete(List<PlantResponse> data) {
 
                 if (data == null) {
                     Toast.makeText(PlantsActivity.this, getString(R.string.msg_while_loading_data), Toast.LENGTH_SHORT).show();
@@ -118,7 +118,7 @@ public class PlantsActivity extends BaseNavActivity {
                 _manager.addItems(data);
                 showTotalPower(data);
 
-                Plant zoomPlant = data.get(0);
+                PlantResponse zoomPlant = data.get(0);
                 if (zoomPlant == null) {
                     Toast.makeText(PlantsActivity.this, R.string.msg_while_loading_data, Toast.LENGTH_SHORT).show();
                     return;
@@ -139,11 +139,11 @@ public class PlantsActivity extends BaseNavActivity {
         });
     }
 
-    private void moveCamera(List<Plant> data) {
+    private void moveCamera(List<PlantResponse> data) {
         double lat = 0.0;
         double lng = 0.0;
 
-        for (Plant plant : data) {
+        for (PlantResponse plant : data) {
             lat += plant.Latitude;
             lng += plant.Longitude;
         }
@@ -152,11 +152,11 @@ public class PlantsActivity extends BaseNavActivity {
                 new LatLng(lat / data.size(), lng / data.size()), 5f)));
     }
 
-    private void showTotalPower(List<Plant> data) {
+    private void showTotalPower(List<PlantResponse> data) {
 
         double res = 0.0;
 
-        for (Plant plant : data) {
+        for (PlantResponse plant : data) {
             res += plant.Power;
         }
 
@@ -186,7 +186,7 @@ public class PlantsActivity extends BaseNavActivity {
 
     }
 
-    class MarkerHolder extends GenericHolder<Plant> {
+    class MarkerHolder extends GenericHolder<PlantResponse> {
 
         ConvertUtils mConvertUtils;
 
@@ -215,7 +215,7 @@ public class PlantsActivity extends BaseNavActivity {
         }
 
         @Override
-        public void update(Plant plant) {
+        public void update(PlantResponse plant) {
             _imageHolder.setBackgroundColor(mConvertUtils.getIconBackground(plant.Type));
             _image.setBackground(mConvertUtils.getIcon(plant.Type));
             _temperature.setText(mConvertUtils.getTemperature(plant.Temperature));
@@ -226,12 +226,12 @@ public class PlantsActivity extends BaseNavActivity {
         }
     }
 
-    class PlantRenderer extends DefaultClusterRenderer<Plant> {
+    class PlantRenderer extends DefaultClusterRenderer<PlantResponse> {
 
         private final IconGenerator _iconGenerator;
         private final MarkerHolder _holder;
 
-        PlantRenderer(Context context, GoogleMap map, ClusterManager<Plant> clusterManager) {
+        PlantRenderer(Context context, GoogleMap map, ClusterManager<PlantResponse> clusterManager) {
             super(context, map, clusterManager);
 
             View view = getLayoutInflater().inflate(R.layout.template_marker_plant, null);
@@ -245,7 +245,7 @@ public class PlantsActivity extends BaseNavActivity {
         }
 
         @Override
-        protected void onBeforeClusterItemRendered(Plant plant, MarkerOptions markerOptions) {
+        protected void onBeforeClusterItemRendered(PlantResponse plant, MarkerOptions markerOptions) {
             _holder.update(plant);
 
             Bitmap icon = _iconGenerator.makeIcon();
@@ -254,7 +254,7 @@ public class PlantsActivity extends BaseNavActivity {
 
 
         @Override
-        protected boolean shouldRenderAsCluster(Cluster<Plant> cluster) {
+        protected boolean shouldRenderAsCluster(Cluster<PlantResponse> cluster) {
             return cluster.getSize() > 1;
         }
     }

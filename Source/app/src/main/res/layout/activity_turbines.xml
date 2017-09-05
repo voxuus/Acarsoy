@@ -56,7 +56,7 @@
                         android:layout_height="match_parent"
                         android:background="@color/colorIndigo900"
                         android:gravity="center"
-                        android:padding="8dp"
+                        android:padding="4dp"
                         android:text="@string/toplam"
                         android:textAllCaps="true"
                         android:textColor="@android:color/white"
@@ -67,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@color/colorIndigo500"
-                        android:minWidth="100dp">
+                        android:padding="4dp">
 
                         <TextView
                             android:id="@+id/activity_turbines_txt_total_power"
@@ -75,7 +75,7 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:padding="8dp"
+                            android:padding="4dp"
                             android:textColor="@android:color/white"
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -86,7 +86,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:indeterminate="true"
-                            android:padding="4dp"
                             android:visibility="invisible"
                             tools:visibility="visible"/>
 
@@ -122,6 +121,14 @@
                             android:textStyle="bold"/>
 
                     </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/activity_turbines_analysis"
+                        android:layout_width="64dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorGreen900"
+                        android:padding="8dp"
+                        android:src="@drawable/analysis"/>
 
                 </LinearLayout>
 

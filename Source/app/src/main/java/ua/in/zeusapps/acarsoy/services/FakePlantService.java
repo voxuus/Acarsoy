@@ -8,8 +8,7 @@ import java.util.Random;
 
 import ua.in.zeusapps.acarsoy.common.Const;
 import ua.in.zeusapps.acarsoy.models.PlantProductivity;
-import ua.in.zeusapps.acarsoy.models.Position;
-import ua.in.zeusapps.acarsoy.services.api.Plant;
+import ua.in.zeusapps.acarsoy.services.api.PlantResponse;
 
 public class FakePlantService implements IPlantService {
 
@@ -23,8 +22,8 @@ public class FakePlantService implements IPlantService {
     private final static double LATITUDE_SKEW = 2;
 
     @Override
-    public Plant getPlant() {
-        return new Plant(
+    public PlantResponse getPlant() {
+        return new PlantResponse(
                 getName(),
                 getType(),
                 getPosition().getLatitude(),
@@ -35,8 +34,8 @@ public class FakePlantService implements IPlantService {
     }
 
     @Override
-    public List<Plant> getPlantList() {
-        List<Plant> plants = new ArrayList<>();
+    public List<PlantResponse> getPlantList() {
+        List<PlantResponse> plants = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {
             plants.add(getPlant());
@@ -46,7 +45,7 @@ public class FakePlantService implements IPlantService {
     }
 
     @Override
-    public List<PlantProductivity> getPlantProductivity(Plant plant) {
+    public List<PlantProductivity> getPlantProductivity(PlantResponse plant) {
         List<PlantProductivity> prods = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
@@ -100,4 +99,27 @@ public class FakePlantService implements IPlantService {
                 LATITUDE_CENTER + LATITUDE_SKEW / 2,
                 LONGITUDE_CENTER + LONGITUDE_SKEW / 2);
     }
+
+    public class Position {
+        private double _longitude;
+        private double _latitude;
+
+        public Position(double latitude, double longitude) {
+            _longitude = longitude;
+            _latitude = latitude;
+        }
+
+        public double getLongitude() {
+            return _longitude;
+        }
+
+        public double getLatitude() {
+            return _latitude;
+        }
+
+        public LatLng toLatLng(){
+            return new LatLng(_latitude, _longitude);
+        }
+    }
+
 }

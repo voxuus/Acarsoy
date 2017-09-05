@@ -14,10 +14,12 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -25,15 +27,10 @@ import butterknife.OnClick;
 import ua.in.zeusapps.acarsoy.R;
 import ua.in.zeusapps.acarsoy.common.Const;
 import ua.in.zeusapps.acarsoy.common.IAsyncCommand;
-import ua.in.zeusapps.acarsoy.models.PlantProductivity;
 import ua.in.zeusapps.acarsoy.services.AcarsoyService;
-import ua.in.zeusapps.acarsoy.services.FakePlantService;
-import ua.in.zeusapps.acarsoy.services.IPlantService;
 import ua.in.zeusapps.acarsoy.services.api.TrendlerResponse;
 
 public class ChartActivity extends BaseNavActivity {
-
-    private final IPlantService _plantService = new FakePlantService();
 
     @BindView(R.id.activity_chart_chart)
     LineChart _chart;
@@ -125,24 +122,28 @@ public class ChartActivity extends BaseNavActivity {
                 break;
             case Week:
                 mBtnByWeek.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-
+                mTxtPeriod.setText(mBtnByWeek.getText());
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.HOUR_OF_DAY, 0);
                 cal.clear(Calendar.MINUTE);
                 cal.clear(Calendar.SECOND);
                 cal.clear(Calendar.MILLISECOND);
                 cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
-
                 mTxtDate.setText(df.format(cal.getTime()) + " - " + df.format(Calendar.getInstance().getTime()));
-                mTxtPeriod.setText(mBtnByWeek.getText());
                 break;
             case Month:
                 mBtnByMonth.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 mTxtPeriod.setText(mBtnByMonth.getText());
+                cal = Calendar.getInstance();
+                cal = new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1);
+                mTxtDate.setText(df.format(cal.getTime()) + " - " + df.format(Calendar.getInstance().getTime()));
                 break;
             case Year:
                 mBtnByYear.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 mTxtPeriod.setText(mBtnByYear.getText());
+                cal = Calendar.getInstance();
+                cal = new GregorianCalendar(cal.get(Calendar.YEAR), 0, 1);
+                mTxtDate.setText(df.format(cal.getTime()) + " - " + df.format(Calendar.getInstance().getTime()));
                 break;
         }
 
@@ -153,8 +154,49 @@ public class ChartActivity extends BaseNavActivity {
 
         mAcarsoyService.getTrendlerAsync(new IAsyncCommand<String, TrendlerResponse>() {
             @Override
-            public void onComplete(TrendlerResponse data) {
-                Object obj = data;
+            public void onComplete(final TrendlerResponse data) {
+                List<Entry> entries = new ArrayList<>();
+
+                int index = 0;
+                for (TrendlerResponse.Turbine turbine : data.Turbines) {
+                    float val = 0;
+                    switch (mPeriod) {
+                        case Day:
+                            val = (float) turbine.PowerToday;
+                            break;
+                        case Week:
+                            val = (float) turbine.PowerWeek;
+                            break;
+                        case Month:
+                            val = (float) turbine.PowerMonth;
+                            break;
+                        case Year:
+                            val = (float) turbine.PowerYear;
+                            break;
+                    }
+                    Entry entry = new Entry(index++, val);
+                    entries.add(entry);
+                }
+
+                LineDataSet coalDataSet = new LineDataSet(entries, mPlantName);
+                coalDataSet.setColor(ContextCompat.getColor(ChartActivity.this, android.R.color.holo_green_dark));
+                coalDataSet.setLineWidth(3f);
+                LineData line = new LineData(coalDataSet);
+
+                _chart.setData(line);
+
+                setXAxis(_chart.getXAxis(), new IAxisValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value, AxisBase axis) {
+                        return data.Turbines.get((int) value).Name;
+                    }
+                });
+                setYAxis(_chart.getAxisLeft());
+                setYAxis(_chart.getAxisRight());
+
+                _chart.notifyDataSetChanged();
+                _chart.invalidate();
+
             }
 
             @Override
@@ -167,50 +209,14 @@ public class ChartActivity extends BaseNavActivity {
                 return mPlantName;
             }
         });
-
-
-        //TODO remove fake data
-        List<PlantProductivity> productivities = _plantService.getPlantsProductivityByHours();
-
-        List<Entry> coalEntries = new ArrayList<>();
-        List<Entry> windEntries = new ArrayList<>();
-
-        for (PlantProductivity productivity : productivities) {
-            Entry entry = new Entry(productivity.getHour(), (float) productivity.getPower());
-            if (productivity.getPlantType().equals(Const.ENERGY_TYPE_COAL)) {
-                coalEntries.add(entry);
-            } else {
-                windEntries.add(entry);
-            }
-        }
-
-        LineDataSet coalDataSet = new LineDataSet(coalEntries, Const.ENERGY_TYPE_COAL);
-        coalDataSet.setColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
-        coalDataSet.setLineWidth(3f);
-        LineDataSet windDataSet = new LineDataSet(windEntries, Const.ENERGY_TYPE_WIND);
-        windDataSet.setColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
-        windDataSet.setLineWidth(3f);
-        LineData line = new LineData(coalDataSet, windDataSet);
-
-        _chart.setData(line);
-
-        setXAxis(_chart.getXAxis());
-        setYAxis(_chart.getAxisLeft());
-        setYAxis(_chart.getAxisRight());
     }
 
-    private void setXAxis(XAxis axis) {
+    private void setXAxis(XAxis axis, IAxisValueFormatter valueFormatter) {
         axis.setPosition(XAxis.XAxisPosition.BOTTOM);
         axis.setTextSize(10f);
         axis.setDrawAxisLine(true);
         axis.setDrawGridLines(false);
-
-        axis.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return (int) value + ":00";
-            }
-        });
+        axis.setValueFormatter(valueFormatter);
     }
 
     private void setYAxis(YAxis axis) {

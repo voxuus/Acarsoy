@@ -28,6 +28,7 @@ import ua.in.zeusapps.acarsoy.R;
 import ua.in.zeusapps.acarsoy.common.Const;
 import ua.in.zeusapps.acarsoy.common.IAsyncCommand;
 import ua.in.zeusapps.acarsoy.services.AcarsoyService;
+import ua.in.zeusapps.acarsoy.services.api.PlantResponse;
 import ua.in.zeusapps.acarsoy.services.api.TrendlerResponse;
 
 public class ChartActivity extends BaseNavActivity {
@@ -152,6 +153,36 @@ public class ChartActivity extends BaseNavActivity {
 
     private void loadDataAsync() {
 
+        _chart.clear();
+
+        if (mPlantName == null) {
+            mAcarsoyService.getPlantsAsync(new IAsyncCommand<Object, List<PlantResponse>>() {
+                @Override
+                public void onComplete(List<PlantResponse> data) {
+                    for (PlantResponse item : data) {
+                        if (item.Type.equals(Const.ENERGY_TYPE_WIND)) {
+                            mPlantName = item.Id;
+                        }
+                    }
+                    getTrendlerDataAsync();
+                }
+
+                @Override
+                public void onError(String error) {
+                    Toast.makeText(ChartActivity.this, error, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public Object getParameters() {
+                    return null;
+                }
+            });
+        } else {
+            getTrendlerDataAsync();
+        }
+    }
+
+    private void getTrendlerDataAsync() {
         mAcarsoyService.getTrendlerAsync(new IAsyncCommand<String, TrendlerResponse>() {
             @Override
             public void onComplete(final TrendlerResponse data) {
@@ -178,10 +209,10 @@ public class ChartActivity extends BaseNavActivity {
                     entries.add(entry);
                 }
 
-                LineDataSet coalDataSet = new LineDataSet(entries, mPlantName);
-                coalDataSet.setColor(ContextCompat.getColor(ChartActivity.this, android.R.color.holo_green_dark));
-                coalDataSet.setLineWidth(3f);
-                LineData line = new LineData(coalDataSet);
+                LineDataSet dataSet = new LineDataSet(entries, mPlantName);
+                dataSet.setColor(ContextCompat.getColor(ChartActivity.this, android.R.color.holo_green_dark));
+                dataSet.setLineWidth(3f);
+                LineData line = new LineData(dataSet);
 
                 _chart.setData(line);
 

@@ -16,7 +16,6 @@
             android:id="@+id/main_nav_menu_turbines_list"
             android:icon="@drawable/ic_turbines_list"
             android:title="Turbines list"/>
-
     </group>
     <group
         android:id="@+id/group_nav_2"

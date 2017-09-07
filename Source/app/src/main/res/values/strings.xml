@@ -4,8 +4,8 @@
     <string name="activity_login_button">Giris yap</string>
     <string name="activity_login_password">Password</string>
     <string name="activity_login_username">Email</string>
-    <string name="power_format_kwatt">%s KWatt</string>
-    <string name="power_format_mwatt">%s MWatt</string>
+    <string name="power_format_kwatt">%s KW</string>
+    <string name="power_format_mwatt">%s MW</string>
     <string name="wind_format">%s m/s</string>
     <string name="temperature">%s°C</string>
     <string name="title_activity_maps">Map</string>

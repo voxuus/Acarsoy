@@ -1,19 +1,20 @@
 package ua.in.zeusapps.acarsoy.activities;
 
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,16 +23,19 @@ import ua.in.zeusapps.acarsoy.common.Const;
 import ua.in.zeusapps.acarsoy.common.ConvertUtils;
 import ua.in.zeusapps.acarsoy.common.GenericAdapter;
 import ua.in.zeusapps.acarsoy.common.GenericHolder;
+import ua.in.zeusapps.acarsoy.common.IAsyncCommand;
 import ua.in.zeusapps.acarsoy.services.AcarsoyService;
-import ua.in.zeusapps.acarsoy.services.api.Plant;
-
+import ua.in.zeusapps.acarsoy.services.api.PlantResponse;
+import ua.in.zeusapps.acarsoy.services.api.TurbineRequest;
+import ua.in.zeusapps.acarsoy.services.api.TurbineResponse;
 
 public class TurbineDetailsActivity extends BaseNavActivity {
 
-    private Plant.Turbine mTurbine;
+    private PlantResponse.Turbine mTurbine;
+
+    private ConvertUtils mConvertUtils;
 
     private AcarsoyService mAcarsoyService;
-    private ConvertUtils mConvertUtils;
 
     @BindView(R.id.activity_plant_details_image_holder)
     FrameLayout _imageHolder;
@@ -48,14 +52,11 @@ public class TurbineDetailsActivity extends BaseNavActivity {
     @BindView(R.id.activity_turbine_details_txt_plant_name)
     TextView mTxtPlantName;
 
-    @BindView(R.id.activity_turbine_details_power)
-    TextView mTxtViewPower;
-
-    @BindView(R.id.activity_turbine_details_wind)
-    TextView mTxtViewWind;
-
     @BindView(R.id.activity_turbine_details_wind_direction)
     ImageView mImgWindDirection;
+
+    @BindView(R.id.activity_turbine_details_recycler)
+    RecyclerView mRecyclerView;
 
     @Override
     protected int getLayoutId() {
@@ -66,16 +67,19 @@ public class TurbineDetailsActivity extends BaseNavActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mTurbine = new Gson().fromJson(getIntent().getStringExtra(Const.EXTRA_TURBINE_JSON), Plant.Turbine.class);
+        mTurbine = new Gson().fromJson(getIntent().getStringExtra(Const.EXTRA_TURBINE_JSON), PlantResponse.Turbine.class);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         initServices();
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         showData();
     }
 
     private void showData() {
+
         int imageRes = 0;
         int backgroundRes = 0;
         switch (mTurbine.Type) {
@@ -88,86 +92,31 @@ public class TurbineDetailsActivity extends BaseNavActivity {
                 backgroundRes = R.color.colorWind;
         }
 
-        _imageView.setBackground(getDrawable(imageRes));
-        _imageHolder.setBackgroundColor(ContextCompat.getColor(TurbineDetailsActivity.this, backgroundRes));
-
-        _temperatureTextView.setText(mConvertUtils.getTemperature(mTurbine.Temperature));
-        _temperatureTextView.setBackgroundColor(ContextCompat.getColor(TurbineDetailsActivity.this, R.color.colorTemperature));
-
-        mTxtTurbineName.setText(mTurbine.Name);
-        mTxtPlantName.setText(mTurbine.PlantName);
-
-        mTxtViewPower.setText(mConvertUtils.getPowerMWatt(mTurbine.Power));
-        mTxtViewWind.setText(mConvertUtils.getWind(mTurbine.WindSpeed));
-
-        RotateAnimation rotate = new RotateAnimation(0, (float) mTurbine.WindDirection, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotate.setDuration(350);
-        rotate.setInterpolator(new LinearInterpolator());
-        rotate.setFillEnabled(true);
-        rotate.setFillAfter(true);
-        mImgWindDirection.startAnimation(rotate);
-    }
-
-    @Override
-    protected int getCheckedNavId() {
-        return 0;
-    }
-
-    private void initServices() {
-        mAcarsoyService = new AcarsoyService();
-        mConvertUtils = new ConvertUtils(this);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return super.onSupportNavigateUp();
-    }
-
-  /*  private void loadDataAsync() {
-        mAcarsoyService.getPlantsAsync(new IAsyncCommand<Object, List<Plant>>() {
+        mAcarsoyService.getTurbineDetailsAsync(new IAsyncCommand<TurbineRequest, TurbineResponse>() {
             @Override
-            public void onComplete(List<Plant> data) {
+            public void onComplete(final TurbineResponse data) {
 
-                if (data == null) {
-                    Toast.makeText(TurbineDetailsActivity.this, R.string.msg_while_loading_data, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                Plant curPlant = null;
-
-                for (Plant plant : data) {
-                    if (plant.Name.equals(mPlantName)) {
-                        curPlant = plant;
-                        break;
+                mRecyclerView.setAdapter(new Adapter(new ArrayList<Pair<String, String>>() {
+                    {
+                        add(new Pair<>("Power", data.Turbine.Power.toString()));
+                        add(new Pair<>("Wind Speed", data.Turbine.WindSpeed.toString()));
+                        add(new Pair<>("Temperature", data.Turbine.Temperature.toString()));
+                        add(new Pair<>("Energy Total", data.Turbine.EnergyTotal.toString()));
+                        add(new Pair<>("Consumption Total", data.Turbine.ConsumptionTotal.toString()));
+                        add(new Pair<>("Reactive Power", data.Turbine.ReactivePower.toString()));
+                        add(new Pair<>("Current U", data.Turbine.CurrentU.toString()));
+                        add(new Pair<>("Current V", data.Turbine.CurrentV.toString()));
+                        add(new Pair<>("Current W", data.Turbine.CurrentW.toString()));
+                        add(new Pair<>("Voltage U", data.Turbine.VoltageU.toString()));
+                        add(new Pair<>("Voltage V", data.Turbine.VoltageV.toString()));
+                        add(new Pair<>("Voltage W", data.Turbine.VoltageW.toString()));
+                        add(new Pair<>("Wind Direction", data.Turbine.WindDirection.toString()));
+                        add(new Pair<>("Frequency", data.Turbine.Frequency.toString()));
+                        add(new Pair<>("Voltage L1", data.Turbine.VoltageL1.toString()));
+                        add(new Pair<>("Voltage L2", data.Turbine.VoltageL2.toString()));
+                        add(new Pair<>("Voltage L3", data.Turbine.VoltageL3.toString()));
                     }
-                }
-
-                if (curPlant == null) {
-                    Toast.makeText(TurbineDetailsActivity.this, R.string.msg_while_loading_data, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                int imageRes = 0;
-                int backgroundRes = 0;
-                switch (curPlant.Type) {
-                    case Const.ENERGY_TYPE_COAL:
-                        imageRes = R.drawable.coal;
-                        backgroundRes = R.color.colorCoal;
-                        break;
-                    case Const.ENERGY_TYPE_WIND:
-                        imageRes = R.drawable.wind;
-                        backgroundRes = R.color.colorWind;
-                }
-
-                _imageView.setBackground(getDrawable(imageRes));
-                int color = ContextCompat.getColor(TurbineDetailsActivity.this, backgroundRes);
-                _imageHolder.setBackgroundColor(color);
-
-                _temperatureTextView.setText(mConvertUtils.getTemperature(curPlant.Temperature));
-                _nameTextView.setText(curPlant.Name);
-
-                _recyclerView.setAdapter(new Adapter(curPlant.Turbines));
+                }));
             }
 
             @Override
@@ -176,85 +125,64 @@ public class TurbineDetailsActivity extends BaseNavActivity {
             }
 
             @Override
-            public Object getParameters() {
-                return null;
+            public TurbineRequest getParameters() {
+                return new TurbineRequest(mTurbine.PlantName, mTurbine.Name);
             }
         });
-    }*/
-
-   /* private void showData(Plant plant, List<PlantProductivity> productivities) {
-        int imageRes = 0;
-        int backgroundRes = 0;
-        switch (plant.Type) {
-            case Const.ENERGY_TYPE_COAL:
-                imageRes = R.drawable.coal;
-                backgroundRes = R.color.colorCoal;
-                break;
-            case Const.ENERGY_TYPE_WIND:
-                imageRes = R.drawable.wind;
-                backgroundRes = R.color.colorWind;
-        }
 
         _imageView.setBackground(getDrawable(imageRes));
-        int color = ContextCompat.getColor(this, backgroundRes);
-        _imageHolder.setBackgroundColor(color);
+        _imageHolder.setBackgroundColor(ContextCompat.getColor(TurbineDetailsActivity.this, backgroundRes));
 
-        String temperature = String.format(
-                getString(R.string.temperature),
-                _df.format(plant.Temperature));
-        _temperatureTextView.setText(temperature);
-        mTxtViewPlantName.setText(plant.Name);
+        _temperatureTextView.setText(mConvertUtils.getTemperature(mTurbine.Temperature));
+        _temperatureTextView.setBackgroundColor(ContextCompat.getColor(TurbineDetailsActivity.this, R.color.colorTemperature));
 
-        Adapter adapter = new Adapter(productivities);
-        _recyclerView.setAdapter(adapter);
-        _recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }*/
-
-   /* class Holder extends GenericHolder<PlantProductivity> {
-        @BindView(R.id.template_plant_productivity_details_power)
-        TextView powerTextView;
-        @BindView(R.id.template_plant_productivity_details_wind)
-        TextView windTextView;
-
-        public Holder(View itemView) {
-            super(itemView);
-        }
-
-        public void update(PlantProductivity productivity) {
-            powerTextView.setText(
-                    String.format(
-                            getString(R.string.power_format),
-                            _df.format(productivity.getPowerMWatt())));
-            windTextView.setText(
-                    String.format(
-                            getString(R.string.wind_format),
-                            _df.format(productivity.getWind())));
-        }
+        mTxtTurbineName.setText(mTurbine.Name);
+        mTxtPlantName.setText(mTurbine.PlantName);
+        mImgWindDirection.setRotation((float) mTurbine.WindDirection);
     }
 
-    private class Adapter extends GenericAdapter<PlantProductivity, Holder> {
-        protected Adapter(List<PlantProductivity> plantProductivities) {
-            super(plantProductivities);
+    @Override
+    protected int getCheckedNavId() {
+        return 0;
+    }
+
+    private void initServices() {
+        mConvertUtils = new ConvertUtils(this);
+        mAcarsoyService = new AcarsoyService();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
+
+    public class Adapter extends GenericAdapter<Pair<String, String>, Holder> {
+
+        protected Adapter(List<Pair<String, String>> items) {
+            super(items);
         }
 
         @Override
         public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = getLayoutInflater()
-                    .inflate(R.layout.template_plant_productivity_details, parent, false);
-            return new Holder(view);
+            return new Holder(getLayoutInflater().inflate(R.layout.template_turbine_detail, parent, false));
         }
-    }*/
 
+        @Override
+        public void onBindViewHolder(Holder holder, int position) {
+            super.onBindViewHolder(holder, position);
+        }
+    }
 
-    class Holder extends GenericHolder<Plant.Turbine> {
+    public class Holder extends GenericHolder<Pair<String, String>> {
 
         ConvertUtils mConvertUtils;
 
-        @BindView(R.id.activity_turbine_details_power)
-        TextView mTextViewPower;
+        @BindView(R.id.template_turbine_details_txt_key)
+        TextView mTextViewValue;
 
-        @BindView(R.id.template_plant_productivity_details_wind)
-        TextView mTextViewWind;
+        @BindView(R.id.template_turbine_details_txt_value)
+        TextView mTextViewUnits;
 
         public Holder(View itemView) {
             super(itemView);
@@ -262,24 +190,10 @@ public class TurbineDetailsActivity extends BaseNavActivity {
         }
 
         @Override
-        public void update(Plant.Turbine plant) {
-            mTextViewPower.setText(mConvertUtils.getPowerMWatt(plant.Power));
-            mTextViewWind.setText(mConvertUtils.getWind(plant.WindSpeed));
-        }
-    }
+        public void update(final Pair<String, String> item) {
 
-    class Adapter extends GenericAdapter<Plant.Turbine, Holder> {
-
-        Adapter(List<Plant.Turbine> plants) {
-            super(plants);
-        }
-
-        @Override
-        public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = getLayoutInflater()
-                    .inflate(R.layout.template_plant_productivity_details, parent, false);
-
-            return new Holder(view);
+            mTextViewValue.setText(String.valueOf(item.first));
+            mTextViewUnits.setText(String.valueOf(item.second));
         }
     }
 }

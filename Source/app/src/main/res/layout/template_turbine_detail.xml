@@ -1,40 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="26dp">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/colorPower">
+        android:background="@color/colorPower"
+        android:padding="6dp">
+
         <TextView
+            android:id="@+id/template_turbine_details_txt_key"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-
+            android:gravity="center"
             android:textAlignment="center"
             android:textAllCaps="true"
+
             android:textColor="@android:color/white"
             android:textSize="16sp"
-            android:id="@+id/activity_turbine_details_power"/>
+            android:textStyle="bold"
+            tools:text="32 MWatt"/>
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/colorWindSpeed">
+        android:background="@color/colorWindSpeed"
+        android:padding="4dp">
+
         <TextView
+            android:id="@+id/template_turbine_details_txt_value"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-
+            android:gravity="center"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="16sp"
-            android:id="@+id/template_plant_productivity_details_wind"/>
+            android:textStyle="bold"
+            tools:text="2.02 m/s"/>
     </FrameLayout>
+
 </LinearLayout>

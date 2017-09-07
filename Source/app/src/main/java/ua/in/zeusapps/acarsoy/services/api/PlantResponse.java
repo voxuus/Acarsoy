@@ -5,13 +5,22 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.maps.android.clustering.ClusterItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by oleg on 16.08.2017.
  */
 
-public class Plant implements ClusterItem {
+public class PlantResponse implements ClusterItem {
+
+    @SerializedName("error")
+    @Expose
+    public int ErrorCode;
+
+    @SerializedName("message")
+    @Expose
+    public String Message;
 
     @SerializedName("id")
     @Expose
@@ -35,7 +44,7 @@ public class Plant implements ClusterItem {
 
     @SerializedName("center")
     @Expose
-    public Plant.Position Position;
+    public PlantResponse.Position Position;
 
     @SerializedName("power")
     @Expose
@@ -47,7 +56,7 @@ public class Plant implements ClusterItem {
 
     @SerializedName("buildings")
     @Expose
-    public List<Turbine> Turbines = null;
+    public List<Turbine> Turbines = new ArrayList<>();
 
     @SerializedName("wind")
     @Expose
@@ -72,7 +81,7 @@ public class Plant implements ClusterItem {
         return Type;
     }
 
-    public Plant(String name, String type, double latitude, double longitude, double power, double wind, double temperature) {
+    public PlantResponse(String name, String type, double latitude, double longitude, double power, double wind, double temperature) {
         Name = name;
         Type = type;
         Latitude = latitude;

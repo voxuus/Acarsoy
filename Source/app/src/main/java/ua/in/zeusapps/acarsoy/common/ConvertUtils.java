@@ -7,7 +7,6 @@ import android.support.v4.content.ContextCompat;
 import java.text.DecimalFormat;
 
 import ua.in.zeusapps.acarsoy.R;
-import ua.in.zeusapps.acarsoy.services.api.Plant;
 
 /**
  * Created by oleg on 17.08.2017.
@@ -57,5 +56,11 @@ public class ConvertUtils {
                 mContext.getString(R.string.temperature),
                 _df.format(temp)
         );
+    }
+
+    public String getPowerKWatt(double power) {
+        return String.format(
+                mContext.getString(R.string.power_format_kwatt),
+                _df.format(power));
     }
 }

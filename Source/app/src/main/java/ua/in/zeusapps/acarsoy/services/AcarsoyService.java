@@ -9,9 +9,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ua.in.zeusapps.acarsoy.common.IAsyncCommand;
 import ua.in.zeusapps.acarsoy.services.api.AcarsoyApiService;
-import ua.in.zeusapps.acarsoy.services.api.Plant;
+import ua.in.zeusapps.acarsoy.services.api.PlantResponse;
 import ua.in.zeusapps.acarsoy.services.api.TokenRequest;
 import ua.in.zeusapps.acarsoy.services.api.TokenResponse;
+import ua.in.zeusapps.acarsoy.services.api.TrendlerResponse;
+import ua.in.zeusapps.acarsoy.services.api.TurbineRequest;
+import ua.in.zeusapps.acarsoy.services.api.TurbineResponse;
 
 /**
  * Created by oleg on 17.08.2017.
@@ -34,14 +37,14 @@ public class AcarsoyService {
     }
 
     public void getPlantsAsync(final IAsyncCommand asyncCommand) {
-        mAcarsoyService.getMapData(mTokenService.getToken()).enqueue(new Callback<List<Plant>>() {
+        mAcarsoyService.getMapData(mTokenService.getToken()).enqueue(new Callback<List<PlantResponse>>() {
             @Override
-            public void onResponse(Call<List<Plant>> call, Response<List<Plant>> response) {
+            public void onResponse(Call<List<PlantResponse>> call, Response<List<PlantResponse>> response) {
                 asyncCommand.onComplete(response.body());
             }
 
             @Override
-            public void onFailure(Call<List<Plant>> call, Throwable t) {
+            public void onFailure(Call<List<PlantResponse>> call, Throwable t) {
                 asyncCommand.onError(t.getMessage());
             }
         });
@@ -60,5 +63,34 @@ public class AcarsoyService {
                         asyncCommand.onError(t.getMessage());
                     }
                 });
+    }
+
+    public void getTurbineDetailsAsync(final IAsyncCommand<TurbineRequest, TurbineResponse> asyncCommand) {
+        mAcarsoyService.getTurbineData(asyncCommand.getParameters().getPlant(), asyncCommand.getParameters().getTurbine(), mTokenService.getToken()).enqueue(new Callback<TurbineResponse>() {
+            @Override
+            public void onResponse(Call<TurbineResponse> call, Response<TurbineResponse> response) {
+                asyncCommand.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<TurbineResponse> call, Throwable t) {
+                asyncCommand.onError(t.getMessage());
+            }
+        });
+    }
+
+    public void getTrendlerAsync(final IAsyncCommand<String, TrendlerResponse> asyncCommand) {
+        mAcarsoyService.getTrendlerData(asyncCommand.getParameters(), mTokenService.getToken()).enqueue(new Callback<TrendlerResponse>() {
+            @Override
+            public void onResponse(Call<TrendlerResponse> call, Response<TrendlerResponse> response) {
+                asyncCommand.onComplete(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<TrendlerResponse> call, Throwable t) {
+                asyncCommand.onError(t.getMessage());
+            }
+        });
+
     }
 }

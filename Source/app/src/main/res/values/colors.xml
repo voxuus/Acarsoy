@@ -7,8 +7,8 @@
     <color name="colorWind">#006f86</color>
     <color name="colorTemperature">#1f884d</color>
 
-    <color name="colorPower">#18496a</color>
-    <color name="colorWindSpeed">#235372</color>
+    <color name="colorPower">#dd18496a</color>
+    <color name="colorWindSpeed">#cc235372</color>
     <color name="colorPlantName">#083f61</color>
 
     <color name="colorTextWhite">#BFFFFFFF</color>
@@ -16,5 +16,8 @@
     <color name="colorTeal900">#DD004D40</color>
     <color name="colorIndigo500">#DD5C6BC0</color>
     <color name="colorDarkBlue">#FF0C2338</color>
+    <color name="colorRed700">#D32F2F</color>
+    <color name="colorGreen900">#1B5E20</color>
+    <color name="colorGray500">#9E9E9E</color>
 
 </resources>

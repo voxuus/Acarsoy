@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/plant_marker_width"
+    android:layout_height="@dimen/plant_marker_height"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="-48dp"
+        android:layout_toRightOf="@id/template_plant_marker_image"
+        android:background="@drawable/rounded_corner"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:paddingLeft="56dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/template_plant_marker_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="NAME"/>
+
+        <TextView
+            android:id="@+id/template_plant_marker_power"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="32 MWatt"/>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/template_plant_marker_image"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="2dp"
+        android:src="@drawable/turbine"/>
+
+</RelativeLayout>
+

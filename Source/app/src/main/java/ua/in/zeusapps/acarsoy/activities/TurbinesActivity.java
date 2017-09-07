@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -37,12 +36,12 @@ import ua.in.zeusapps.acarsoy.common.ConvertUtils;
 import ua.in.zeusapps.acarsoy.common.GenericHolder;
 import ua.in.zeusapps.acarsoy.common.IAsyncCommand;
 import ua.in.zeusapps.acarsoy.services.AcarsoyService;
-import ua.in.zeusapps.acarsoy.services.api.Plant;
+import ua.in.zeusapps.acarsoy.services.api.PlantResponse;
 
 public class TurbinesActivity extends BaseNavActivity {
 
     private GoogleMap _map;
-    private ClusterManager<Plant.Turbine> _manager;
+    private ClusterManager<PlantResponse.Turbine> _manager;
 
     private AcarsoyService mAcarsoyService;
     private ConvertUtils mConvertUtils;
@@ -87,9 +86,9 @@ public class TurbinesActivity extends BaseNavActivity {
                 _map.getUiSettings().setZoomControlsEnabled(true);
                 _manager = new ClusterManager<>(TurbinesActivity.this, googleMap);
                 _manager.setRenderer(new TurbineRenderer(TurbinesActivity.this, googleMap, _manager));
-                _manager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<Plant.Turbine>() {
+                _manager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<PlantResponse.Turbine>() {
                     @Override
-                    public boolean onClusterItemClick(Plant.Turbine turbine) {
+                    public boolean onClusterItemClick(PlantResponse.Turbine turbine) {
                         Intent intent = new Intent(TurbinesActivity.this, TurbineDetailsActivity.class);
                         intent.putExtra(Const.EXTRA_TURBINE_JSON, new Gson().toJson(turbine));
                         startActivity(intent);
@@ -103,9 +102,17 @@ public class TurbinesActivity extends BaseNavActivity {
         });
     }
 
-    private void moveCamera(double lat, double lng) {
+    private void moveCamera(List<PlantResponse.Turbine> data) {
+        double lat = 0.0;
+        double lng = 0.0;
+
+        for (PlantResponse.Turbine turbine : data) {
+            lat += turbine.Latitude;
+            lng += turbine.Longitude;
+        }
+
         _map.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(
-                new LatLng(lat, lng), 10f)));
+                new LatLng(lat / data.size(), lng / data.size()), 14f)));
     }
 
     private void loadTurbinesAsync() {
@@ -113,9 +120,9 @@ public class TurbinesActivity extends BaseNavActivity {
         mTxtTotalPower.setVisibility(View.INVISIBLE);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        mAcarsoyService.getPlantsAsync(new IAsyncCommand<Object, List<Plant>>() {
+        mAcarsoyService.getPlantsAsync(new IAsyncCommand<Object, List<PlantResponse>>() {
             @Override
-            public void onComplete(List<Plant> data) {
+            public void onComplete(List<PlantResponse> data) {
 
                 if (data == null) {
                     Toast.makeText(TurbinesActivity.this, R.string.msg_while_loading_data, Toast.LENGTH_SHORT).show();
@@ -125,23 +132,27 @@ public class TurbinesActivity extends BaseNavActivity {
                     return;
                 }
 
-                Plant curPlant = null;
+                PlantResponse curPlant = null;
 
-                for (Plant plant : data) {
+                for (PlantResponse plant : data) {
                     if (plant.Name.equals(mPlantName)) {
                         curPlant = plant;
                         break;
                     }
                 }
 
-                List<Plant.Turbine> turbines = new ArrayList<>();
+                List<PlantResponse.Turbine> turbines = new ArrayList<>();
 
                 if (curPlant == null) {
-                    for (Plant plant : data) {
-                        turbines.addAll(plant.Turbines);
+                    for (PlantResponse plant : data) {
+                        if (plant.Turbines != null) {
+                            turbines.addAll(plant.Turbines);
+                        }
                     }
                 } else {
-                    turbines.addAll(curPlant.Turbines);
+                    if (curPlant.Turbines != null) {
+                        turbines.addAll(curPlant.Turbines);
+                    }
                 }
 
                 if (turbines.size() == 0) {
@@ -155,8 +166,7 @@ public class TurbinesActivity extends BaseNavActivity {
                 _manager.addItems(turbines);
                 showTotalPower(turbines);
 
-                Plant.Turbine zoomTurbine = turbines.get(0);
-                moveCamera(zoomTurbine.Latitude, zoomTurbine.Longitude);
+                moveCamera(turbines);
 
                 mTxtTotalPower.setVisibility(View.VISIBLE);
                 mProgressBar.setVisibility(View.INVISIBLE);
@@ -177,14 +187,14 @@ public class TurbinesActivity extends BaseNavActivity {
         });
     }
 
-    private void showTotalPower(List<Plant.Turbine> turbines) {
+    private void showTotalPower(List<PlantResponse.Turbine> turbines) {
 
         double res = 0.0;
-        for (Plant.Turbine turbine : turbines) {
+        for (PlantResponse.Turbine turbine : turbines) {
             res += turbine.Power;
         }
 
-        mTxtTotalPower.setText(mConvertUtils.getPowerMWatt(res));
+        mTxtTotalPower.setText(mConvertUtils.getPowerKWatt(res));
     }
 
     @OnClick(R.id.activity_turbines_layout_show_list)
@@ -194,27 +204,25 @@ public class TurbinesActivity extends BaseNavActivity {
         startActivity(intent);
     }
 
-    class MarkerHolder extends GenericHolder<Plant.Turbine> {
+    @OnClick(R.id.activity_turbines_analysis)
+    public void OnClickAnalysis() {
+        Intent intent = new Intent(this, ChartActivity.class);
+        intent.putExtra(Const.EXTRA_PLANT_NAME, mPlantName);
+        startActivity(intent);
+    }
+
+    class MarkerHolder extends GenericHolder<PlantResponse.Turbine> {
 
         ConvertUtils mConvertUtils;
 
-        @BindView(R.id.template_plant_marker_image_holder)
-        FrameLayout _imageHolder;
-
         @BindView(R.id.template_plant_marker_image)
         ImageView _image;
-
-        @BindView(R.id.template_plant_marker_temperature)
-        TextView _temperature;
 
         @BindView(R.id.template_plant_marker_name)
         TextView _name;
 
         @BindView(R.id.template_plant_marker_power)
         TextView _power;
-
-        @BindView(R.id.template_plant_marker_wind)
-        TextView _wind;
 
         MarkerHolder(View itemView) {
             super(itemView);
@@ -223,45 +231,44 @@ public class TurbinesActivity extends BaseNavActivity {
         }
 
         @Override
-        public void update(Plant.Turbine turbine) {
-            _imageHolder.setBackgroundColor(mConvertUtils.getIconBackground(turbine.Type));
-            _image.setBackground(mConvertUtils.getIcon(turbine.Type));
-            _temperature.setText(mConvertUtils.getTemperature(turbine.Temperature));
+        public void update(PlantResponse.Turbine turbine) {
             _name.setText(turbine.Name);
-            _power.setText(mConvertUtils.getPowerMWatt(turbine.Power));
-            _wind.setText(mConvertUtils.getWind(turbine.WindSpeed));
+            _power.setText(mConvertUtils.getPowerKWatt(turbine.Power));
         }
     }
 
-    private class TurbineRenderer extends DefaultClusterRenderer<Plant.Turbine> {
+    private class TurbineRenderer extends DefaultClusterRenderer<PlantResponse.Turbine> {
 
         private final IconGenerator _iconGenerator;
         private final MarkerHolder _holder;
 
-        private TurbineRenderer(Context context, GoogleMap map, ClusterManager<Plant.Turbine> clusterManager) {
+        private TurbineRenderer(Context context, GoogleMap map, ClusterManager<PlantResponse.Turbine> clusterManager) {
             super(context, map, clusterManager);
 
-            _iconGenerator = new IconGenerator(context);
-            View view = getLayoutInflater().inflate(R.layout.template_marker_item, null);
+            View view = getLayoutInflater().inflate(R.layout.template_marker_turbine, null);
             int width = (int) getResources().getDimension(R.dimen.plant_marker_width);
             int height = (int) getResources().getDimension(R.dimen.plant_marker_height);
             view.setLayoutParams(new ViewGroup.LayoutParams(width, height));
 
+            _iconGenerator = new IconGenerator(context);
+            _iconGenerator.setBackground(null);
             _iconGenerator.setContentView(view);
             _holder = new MarkerHolder(view);
         }
 
         @Override
-        protected void onBeforeClusterItemRendered(Plant.Turbine turbine, MarkerOptions markerOptions) {
+        protected void onBeforeClusterItemRendered(PlantResponse.Turbine turbine, MarkerOptions markerOptions) {
             _holder.update(turbine);
 
             Bitmap icon = _iconGenerator.makeIcon();
-            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon)).title(turbine.getTitle());
+            icon.setHasAlpha(true);
+
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));
         }
 
 
         @Override
-        protected boolean shouldRenderAsCluster(Cluster<Plant.Turbine> cluster) {
+        protected boolean shouldRenderAsCluster(Cluster<PlantResponse.Turbine> cluster) {
             return cluster.getSize() > 1;
         }
     }

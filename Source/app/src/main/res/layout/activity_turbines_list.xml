@@ -46,7 +46,7 @@
                 android:layout_margin="4dp"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="8dp"
-                tools:listitem="@layout/template_plant_card_item"/>
+                tools:listitem="@layout/template_turbine_card_item"/>
 
         </FrameLayout>
 

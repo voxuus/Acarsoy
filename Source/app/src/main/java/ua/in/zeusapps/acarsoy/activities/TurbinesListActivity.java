@@ -24,7 +24,7 @@ import ua.in.zeusapps.acarsoy.common.GenericAdapter;
 import ua.in.zeusapps.acarsoy.common.GenericHolder;
 import ua.in.zeusapps.acarsoy.common.IAsyncCommand;
 import ua.in.zeusapps.acarsoy.services.AcarsoyService;
-import ua.in.zeusapps.acarsoy.services.api.Plant;
+import ua.in.zeusapps.acarsoy.services.api.PlantResponse;
 
 public class TurbinesListActivity extends BaseNavActivity {
 
@@ -65,33 +65,36 @@ public class TurbinesListActivity extends BaseNavActivity {
     }
 
     private void loadDataAsync() {
-        mAcarsoyService.getPlantsAsync(new IAsyncCommand<Object, List<Plant>>() {
+        mAcarsoyService.getPlantsAsync(new IAsyncCommand<Object, List<PlantResponse>>() {
             @Override
-            public void onComplete(List<Plant> data) {
+            public void onComplete(List<PlantResponse> data) {
 
                 if (data == null) {
                     Toast.makeText(TurbinesListActivity.this, R.string.msg_while_loading_data, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Plant curPlant = null;
+                PlantResponse curPlant = null;
 
-                for (Plant plant : data) {
+                for (PlantResponse plant : data) {
                     if (plant.Name.equals(mPlantName)) {
                         curPlant = plant;
                         break;
                     }
                 }
 
-                List<Plant.Turbine> turbines = new ArrayList<>();
+                List<PlantResponse.Turbine> turbines = new ArrayList<>();
 
                 if (curPlant == null) {
-                    for (Plant plant :
-                            data) {
-                        turbines.addAll(plant.Turbines);
+                    for (PlantResponse plant : data) {
+                        if (plant.Turbines != null) {
+                            turbines.addAll(plant.Turbines);
+                        }
                     }
                 } else {
-                    turbines.addAll(curPlant.Turbines);
+                    if (curPlant.Turbines != null) {
+                        turbines.addAll(curPlant.Turbines);
+                    }
                 }
 
                 if (turbines.size() == 0) {
@@ -118,7 +121,7 @@ public class TurbinesListActivity extends BaseNavActivity {
         _recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    class Holder extends GenericHolder<Plant.Turbine> {
+    class Holder extends GenericHolder<PlantResponse.Turbine> {
 
         ConvertUtils mConvertUtils;
 
@@ -152,12 +155,12 @@ public class TurbinesListActivity extends BaseNavActivity {
         }
 
         @Override
-        public void update(final Plant.Turbine turbine) {
+        public void update(final PlantResponse.Turbine turbine) {
             _icon.setBackground(mConvertUtils.getIcon(turbine.Type));
             _iconHolder.setBackgroundColor(mConvertUtils.getIconBackground(turbine.Type));
             mTxtViewPlantName.setText(turbine.PlantName);
             mTxtViewTurbineName.setText(turbine.Name);
-            _powerTextView.setText(mConvertUtils.getPowerMWatt(turbine.Power));
+            _powerTextView.setText(mConvertUtils.getPowerKWatt(turbine.Power));
             _windTextView.setText(mConvertUtils.getWind(turbine.WindSpeed));
             _temperatureTextView.setText(mConvertUtils.getTemperature(turbine.Temperature));
 
@@ -172,16 +175,16 @@ public class TurbinesListActivity extends BaseNavActivity {
         }
     }
 
-    class Adapter extends GenericAdapter<Plant.Turbine, Holder> {
+    class Adapter extends GenericAdapter<PlantResponse.Turbine, Holder> {
 
-        protected Adapter(List<Plant.Turbine> plants) {
+        protected Adapter(List<PlantResponse.Turbine> plants) {
             super(plants);
         }
 
         @Override
         public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = getLayoutInflater()
-                    .inflate(R.layout.template_plant_card_item, parent, false);
+                    .inflate(R.layout.template_turbine_card_item, parent, false);
 
             return new Holder(view);
         }

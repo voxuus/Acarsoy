@@ -73,6 +73,8 @@ public abstract class BaseNavActivity extends BaseActivity {
                         break;
                     case R.id.main_nav_menu_exit:
                         exitApp();
+                    case R.id.main_nav_menu_logout:
+                        logOut();
                         break;
                 }
 
@@ -83,11 +85,22 @@ public abstract class BaseNavActivity extends BaseActivity {
         mNavViewMain.setCheckedItem(getCheckedNavId());
     }
 
+    private void logOut() {
+        mLocalDbService.saveEmail(null);
+        mLocalDbService.savePassword(null);
+        startActivity(LoginActivity.class);
+    }
+
     protected void exitApp() {
         moveTaskToBack(true);
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(1);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
 
 }

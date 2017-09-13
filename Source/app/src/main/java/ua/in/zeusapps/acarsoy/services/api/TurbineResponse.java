@@ -23,79 +23,79 @@ public class TurbineResponse {
 
     public class Turbine {
 
-        @SerializedName("Power")
+        @SerializedName("POWER")
         @Expose
         public TurbineDetailItem Power;
 
-        @SerializedName("Wind Speed")
+        @SerializedName("WIND SPEED")
         @Expose
         public TurbineDetailItem WindSpeed;
 
-        @SerializedName("Temperature")
+        @SerializedName("TEMPERATURE")
         @Expose
         public TurbineDetailItem Temperature;
 
-        @SerializedName("Energy Total")
+        @SerializedName("ENERGY TOTAL")
         @Expose
         public TurbineDetailItem EnergyTotal;
 
-        @SerializedName("Consumption Total")
+        @SerializedName("CONSUMPTION TOTAL")
         @Expose
         public TurbineDetailItem ConsumptionTotal;
 
-        @SerializedName("Reactive Power")
+        @SerializedName("REACTIVE POWER")
         @Expose
         public TurbineDetailItem ReactivePower;
 
-        @SerializedName("Error Code")
+        @SerializedName("ERROR CODE")
         @Expose
         public TurbineDetailItem ErrorCode;
 
-        @SerializedName("Current U")
+        @SerializedName("CURRENT U")
         @Expose
         public TurbineDetailItem CurrentU;
 
-        @SerializedName("Current V")
+        @SerializedName("CURRENT V")
         @Expose
         public TurbineDetailItem CurrentV;
 
-        @SerializedName("Current W")
+        @SerializedName("CURRENT W")
         @Expose
         public TurbineDetailItem CurrentW;
 
-        @SerializedName("Voltage U")
+        @SerializedName("VOLTAGE U")
         @Expose
         public TurbineDetailItem VoltageU;
 
-        @SerializedName("Voltage V")
+        @SerializedName("VOLTAGE V")
         @Expose
         public TurbineDetailItem VoltageV;
 
-        @SerializedName("Voltage W")
+        @SerializedName("VOLTAGE W")
         @Expose
         public TurbineDetailItem VoltageW;
 
-        @SerializedName("Wind Direction")
+        @SerializedName("WIND DIRECTION")
         @Expose
         public TurbineDetailItem WindDirection;
 
-        @SerializedName("Frequency")
+        @SerializedName("FREQUENCY")
         @Expose
         public TurbineDetailItem Frequency;
 
-        @SerializedName("Voltage L1")
+        @SerializedName("VOLTAGE L1")
         @Expose
         public TurbineDetailItem VoltageL1;
 
-        @SerializedName("Voltage L2")
+        @SerializedName("VOLTAGE L2")
         @Expose
         public TurbineDetailItem VoltageL2;
 
-        @SerializedName("Voltage L3")
+        @SerializedName("VOLTAGE L3")
         @Expose
         public TurbineDetailItem VoltageL3;
 
-        @SerializedName("DataLogger")
+        @SerializedName("DATALOGGER")
         @Expose
         public TurbineDetailItem DataLogger;
 
@@ -107,11 +107,11 @@ public class TurbineResponse {
 
             @SerializedName("units")
             @Expose
-            public String Units;
+            public Object Units;
 
             @Override
             public String toString() {
-                return Value + " " + Units;
+                return String.valueOf(Value) + " "+ String.valueOf(Units);
             }
         }
     }

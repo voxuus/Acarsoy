@@ -83,6 +83,7 @@ public class TurbinesActivity extends BaseNavActivity {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 _map = googleMap;
+                _map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                 _map.getUiSettings().setZoomControlsEnabled(true);
                 _manager = new ClusterManager<>(TurbinesActivity.this, googleMap);
                 _manager.setRenderer(new TurbineRenderer(TurbinesActivity.this, googleMap, _manager));
@@ -215,6 +216,9 @@ public class TurbinesActivity extends BaseNavActivity {
 
         ConvertUtils mConvertUtils;
 
+        @BindView(R.id.template_marker_turbine_layout)
+        View _layout;
+
         @BindView(R.id.template_plant_marker_image)
         ImageView _image;
 
@@ -232,6 +236,10 @@ public class TurbinesActivity extends BaseNavActivity {
 
         @Override
         public void update(PlantResponse.Turbine turbine) {
+            _layout.setBackground(turbine.ErrorCode.equals(0)
+                    ? getResources().getDrawable(R.drawable.rounded_corner_green)
+                    : getResources().getDrawable(R.drawable.rounded_corner_red)
+            );
             _name.setText(turbine.Name);
             _power.setText(mConvertUtils.getPowerKWatt(turbine.Power));
         }

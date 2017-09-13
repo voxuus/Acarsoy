@@ -81,7 +81,7 @@
                         android:background="@android:color/transparent"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="Bugun"
+                        android:text="@string/bugun"
                         android:textSize="16sp"/>
 
                     <Button
@@ -93,7 +93,7 @@
                         android:gravity="center"
 
                         android:padding="8dp"
-                        android:text="Bu Hafta"
+                        android:text="@string/bu_hafta"
                         android:textSize="16sp"/>
 
                     <Button
@@ -104,7 +104,7 @@
                         android:background="@android:color/transparent"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="Bu Ay"
+                        android:text="@string/bu_ay"
                         android:textSize="16sp"/>
 
                     <Button
@@ -115,7 +115,7 @@
                         android:background="@android:color/transparent"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="Bu Yil"
+                        android:text="@string/bu_yil"
                         android:textSize="16sp"/>
 
                 </LinearLayout>

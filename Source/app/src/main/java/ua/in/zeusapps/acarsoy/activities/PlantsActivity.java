@@ -21,6 +21,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
@@ -81,6 +82,7 @@ public class PlantsActivity extends BaseNavActivity {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 _map = googleMap;
+                _map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                 _map.getUiSettings().setZoomControlsEnabled(true);
                 _manager = new ClusterManager<>(PlantsActivity.this, googleMap);
                 _manager.setRenderer(new PlantRenderer(PlantsActivity.this, googleMap, _manager));

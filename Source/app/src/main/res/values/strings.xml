@@ -17,4 +17,8 @@
     <string name="navigation_drawer_open">Drawer Open</string>
     <string name="navigation_drawer_close">Drawer Closed</string>
     <string name="listeye_goster">Listeye Goster</string>
+    <string name="bugun">Bugun</string>
+    <string name="bu_hafta">Bu Hafta</string>
+    <string name="bu_ay">Bu Ay</string>
+    <string name="bu_yil">Bu Yil</string>
 </resources>

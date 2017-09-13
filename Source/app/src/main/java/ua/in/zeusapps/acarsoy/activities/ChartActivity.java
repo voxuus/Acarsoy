@@ -14,8 +14,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,6 +26,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import ua.in.zeusapps.acarsoy.R;
 import ua.in.zeusapps.acarsoy.common.Const;
+import ua.in.zeusapps.acarsoy.common.ConvertUtils;
 import ua.in.zeusapps.acarsoy.common.IAsyncCommand;
 import ua.in.zeusapps.acarsoy.services.AcarsoyService;
 import ua.in.zeusapps.acarsoy.services.api.PlantResponse;
@@ -58,6 +59,8 @@ public class ChartActivity extends BaseNavActivity {
 
     private AcarsoyService mAcarsoyService;
 
+    private ConvertUtils mConvertUtils;
+
     private PeriodEnum mPeriod;
 
     @Override
@@ -69,13 +72,21 @@ public class ChartActivity extends BaseNavActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initActionBar();
+
         initServices();
         mPlantName = getIntent().getStringExtra(Const.EXTRA_PLANT_NAME);
         onClickByYear();
     }
 
+    private void initActionBar() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+    }
+
     private void initServices() {
         mAcarsoyService = new AcarsoyService();
+        mConvertUtils = new ConvertUtils(this);
     }
 
     @Override
@@ -187,9 +198,19 @@ public class ChartActivity extends BaseNavActivity {
             @Override
             public void onComplete(final TrendlerResponse data) {
                 List<Entry> entries = new ArrayList<>();
+                float totalPowerDay = 0.0f;
+                float totalPowerWeek = 0.0f;
+                float totalPowerMonth = 0.0f;
+                float totalPowerYear = 0.0f;
 
                 int index = 0;
                 for (TrendlerResponse.Turbine turbine : data.Turbines) {
+
+                    totalPowerDay += turbine.PowerToday;
+                    totalPowerWeek += turbine.PowerWeek;
+                    totalPowerMonth += turbine.PowerMonth;
+                    totalPowerYear += turbine.PowerYear;
+
                     float val = 0;
                     switch (mPeriod) {
                         case Day:
@@ -228,6 +249,10 @@ public class ChartActivity extends BaseNavActivity {
                 _chart.notifyDataSetChanged();
                 _chart.invalidate();
 
+                mBtnByDay.setText(getString(R.string.bugun) + "\n" + mConvertUtils.getPowerMWatt(totalPowerDay / 1E3));
+                mBtnByWeek.setText(getString(R.string.bu_hafta) + "\n" + mConvertUtils.getPowerMWatt(totalPowerWeek / 1E3));
+                mBtnByMonth.setText(getString(R.string.bu_ay) + "\n" + mConvertUtils.getPowerMWatt(totalPowerMonth / 1E3));
+                mBtnByYear.setText(getString(R.string.bu_yil) + "\n" + mConvertUtils.getPowerMWatt(totalPowerYear / 1E3));
             }
 
             @Override

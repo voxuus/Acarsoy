@@ -49,6 +49,10 @@ public class TurbinesListActivity extends BaseNavActivity {
         initRecyclerView();
         loadDataAsync();
 
+        initActionBar();
+    }
+
+    private void initActionBar() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }

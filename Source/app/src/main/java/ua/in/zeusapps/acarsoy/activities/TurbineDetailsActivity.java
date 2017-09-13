@@ -151,12 +151,6 @@ public class TurbineDetailsActivity extends BaseNavActivity {
         mAcarsoyService = new AcarsoyService();
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return super.onSupportNavigateUp();
-    }
-
     public class Adapter extends GenericAdapter<Pair<String, String>, Holder> {
 
         protected Adapter(List<Pair<String, String>> items) {

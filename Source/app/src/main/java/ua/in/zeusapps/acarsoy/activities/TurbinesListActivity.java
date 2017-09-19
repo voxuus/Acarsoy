@@ -125,6 +125,11 @@ public class TurbinesListActivity extends BaseNavActivity {
         _recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    @Override
+    public void refresh() {
+        loadDataAsync();
+    }
+
     class Holder extends GenericHolder<PlantResponse.Turbine> {
 
         ConvertUtils mConvertUtils;

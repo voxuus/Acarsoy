@@ -1,6 +1,7 @@
 package ua.in.zeusapps.acarsoy.activities;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -10,15 +11,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import ua.in.zeusapps.acarsoy.R;
+import ua.in.zeusapps.acarsoy.common.Const;
+import ua.in.zeusapps.acarsoy.common.IRefresh;
 
 /**
  * Created by oleg on 27.08.2017.
  */
 
-public abstract class BaseNavActivity extends BaseActivity {
+public abstract class BaseNavActivity extends BaseActivity implements IRefresh {
 
     @BindView(R.id.nav_view_main)
     NavigationView mNavViewMain;
@@ -32,12 +36,34 @@ public abstract class BaseNavActivity extends BaseActivity {
     @BindView(R.id.toolbar_img_acarsoy)
     ImageView mImgAcarsoy;
 
+    private Handler handler = new Handler();
+
+    private final Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            refresh();
+            handler.postDelayed(runnable, Const.INTERVAL_REFRESH);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         initToolbar();
         initNavigation();
+
+        initAutoRefresh();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(runnable);
+    }
+
+    private void initAutoRefresh() {
+        handler.postDelayed(runnable, Const.INTERVAL_REFRESH);
     }
 
     protected void initToolbar() {

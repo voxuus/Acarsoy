@@ -75,10 +75,10 @@ public class TurbineDetailsActivity extends BaseNavActivity {
         initServices();
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        showData();
+        loadDataAsync();
     }
 
-    private void showData() {
+    private void loadDataAsync() {
 
         int imageRes = 0;
         int backgroundRes = 0;
@@ -149,6 +149,11 @@ public class TurbineDetailsActivity extends BaseNavActivity {
     private void initServices() {
         mConvertUtils = new ConvertUtils(this);
         mAcarsoyService = new AcarsoyService();
+    }
+
+    @Override
+    public void refresh() {
+        loadDataAsync();
     }
 
     public class Adapter extends GenericAdapter<Pair<String, String>, Holder> {

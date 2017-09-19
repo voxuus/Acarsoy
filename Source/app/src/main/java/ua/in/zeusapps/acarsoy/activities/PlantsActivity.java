@@ -117,6 +117,7 @@ public class PlantsActivity extends BaseNavActivity {
                     return;
                 }
 
+                _manager.clearItems();
                 _manager.addItems(data);
                 showTotalPower(data);
 
@@ -186,6 +187,11 @@ public class PlantsActivity extends BaseNavActivity {
                 .create()
                 .show();
 
+    }
+
+    @Override
+    public void refresh() {
+        loadPlantsAsync();
     }
 
     class MarkerHolder extends GenericHolder<PlantResponse> {

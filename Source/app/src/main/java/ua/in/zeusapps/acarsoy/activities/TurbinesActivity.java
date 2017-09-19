@@ -164,6 +164,7 @@ public class TurbinesActivity extends BaseNavActivity {
                     return;
                 }
 
+                _manager.clearItems();
                 _manager.addItems(turbines);
                 showTotalPower(turbines);
 
@@ -210,6 +211,11 @@ public class TurbinesActivity extends BaseNavActivity {
         Intent intent = new Intent(this, ChartActivity.class);
         intent.putExtra(Const.EXTRA_PLANT_NAME, mPlantName);
         startActivity(intent);
+    }
+
+    @Override
+    public void refresh() {
+        loadTurbinesAsync();
     }
 
     class MarkerHolder extends GenericHolder<PlantResponse.Turbine> {

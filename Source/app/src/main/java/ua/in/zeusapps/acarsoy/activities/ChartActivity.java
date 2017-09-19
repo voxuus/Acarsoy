@@ -15,7 +15,6 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -118,7 +117,8 @@ public class ChartActivity extends BaseNavActivity {
         refresh();
     }
 
-    private void refresh() {
+    @Override
+    public void refresh() {
         mBtnByDay.setTextColor(ContextCompat.getColor(this, R.color.colorGray500));
         mBtnByWeek.setTextColor(ContextCompat.getColor(this, R.color.colorGray500));
         mBtnByMonth.setTextColor(ContextCompat.getColor(this, R.color.colorGray500));

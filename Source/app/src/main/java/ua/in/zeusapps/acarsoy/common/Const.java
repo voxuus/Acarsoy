@@ -12,4 +12,6 @@ public class Const {
     public static final String EXTRA_EMAIL = "EXTRA_EMAIL";
     public static final String EXTRA_PASSWORD = "EXTRA_PASSWORD";
     public static final String EXTRA_TURBINE_JSON = "EXTRA_TURBINE_JSON";
+
+    public static final Integer INTERVAL_REFRESH = 60000;
 }
